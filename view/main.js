@@ -53,44 +53,36 @@ Footprint.targets().then(function (targets) {
 
 
 browser.runtime.onMessage.addListener((message) => {
-  if (message.command === "footprint-remove") {
-    let root = document.querySelector('#targets');
-    let targets = root.querySelectorAll('li');
+  ({
+    'footprint-remove': async () => {
+      let root = document.querySelector('#targets');
+      let targets = root.querySelectorAll('li');
 
-    for (let target of targets) {
-      let name = target.textContent;
-      if (target.getAttribute('data-target-url') == message.targetUrl && window.confirm('Remove: ' + name)) {
-        (async () => {
-          root.removeChild(target);
-          await Footprint.removeTarget(message.targetUrl);
-          await Footprint.notify('Remove: ' + name);
-        })();
+      if (message.confirmation) {
+        if (!window.confirm('Remove: ' + message.name))
+          return false;
+
+        // if (window.confirm('Remove: ' + message.name)) {
+        //   message.confirmation = false;
+        //   await Footprint.sendMessage({command: 'footprint-refresh'}, false);
+        //   console.log(message);
+        // }
+        // return;
       }
-    }
-  }
-});
 
-
-document.querySelector('a#export').addEventListener(
-  'click',
-  async (e) => {
-    e.preventDefault();
-    var text = await Footprint.exportJson();
-    window.open('data:application/json,' + encodeURIComponent(text));
-  },
-  false
-);
-
-document.querySelector('input#import').addEventListener(
-  'change',
-  async (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.onload = async () => {
-      await Footprint.importJson(reader.result);
+      for (let target of targets) {
+        let name = target.textContent;
+        if (target.getAttribute('data-target-url') == message.targetUrl) {
+          (async () => {
+            root.removeChild(target);
+            await Footprint.removeTarget(message.targetUrl);
+            await Footprint.notify('Remove: ' + name);
+          })();
+        }
+      }
+    },
+    'footprint-refresh': () => {
       document.location.href = document.location.href;
-    };
-    reader.readAsText(file);
-  },
-  false
-);
+    }
+  }[message.command] || (() => false))();
+});

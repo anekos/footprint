@@ -32,6 +32,9 @@
       "all_frames": false
     }
   ],
+  "options_ui": {
+    "page": "view/option.html"
+  },
   "permissions": [
     "<all_urls>",
     "contextMenus",

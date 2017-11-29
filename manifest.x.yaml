@@ -21,6 +21,8 @@ content_scripts:
       - content/stalker.js
     run_at: document_end
     all_frames: false
+options_ui:
+  page: view/option.html
 permissions:
   - <all_urls>
   - contextMenus

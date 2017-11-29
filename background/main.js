@@ -6,10 +6,12 @@ browser.contextMenus.create({
   documentUrlPatterns: [chrome.extension.getURL('*')],
   onclick: async (e) => {
     let targetUrl = e.linkUrl;
-    let tabs = await browser.tabs.query({active: true, currentWindow: true});
-    browser.tabs.sendMessage(tabs[0].id, {
-      command: "footprint-remove",
-      targetUrl:  targetUrl
-    });
+    let name = e.linkText;
+    Footprint.sendMessage({
+      command: 'footprint-remove',
+      targetUrl: targetUrl,
+      name: name,
+      confirmation: true,
+    }, {active: true, currentWindow: true});
   }
 });
