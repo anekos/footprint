@@ -5,7 +5,8 @@
     }
     window.hasRun = true;
 
-    let value = await Footprint.getPage(document.location.href);
+    let url = document.location.href;
+    let value = await Footprint.getPage(url);
 
     if (!(value && value.target))
       return Promise.reject('No page data');
@@ -19,17 +20,18 @@
 
       link.addEventListener(
         'click',
-        function (e) {
+        async (e) => {
           e.preventDefault();
           e.stopPropagation();
 
-          Footprint.newPage(target)(link.href, link.textContent.trim()).then(function () {
-            document.location.href = link.href;
-          });
+          await Footprint.newPage(target)(link.href, link.textContent.trim());
+          document.location.href = link.href;
         },
         false
       );
     }
+
+    return Footprint.updateTitle(url, document.title);
   }
 
   install();

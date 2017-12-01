@@ -22,9 +22,11 @@ Footprint.targets().then(function (targets) {
 
         pagesContainer = document.createElement('ol');
         pagesContainer.setAttribute('class', 'pages-container');
+        pagesContainer.setAttribute('reversed', 'reversed');
 
         async function addLinks () {
-          for (let pageUrl of target.pages) {
+          let pages = target.pages.reverse();
+          for (let pageUrl of pages) {
             let page = await Footprint.getPage(pageUrl);
             let pageElement = document.createElement('li');
             let pageLink = document.createElement('a');
