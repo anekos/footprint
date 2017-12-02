@@ -21,8 +21,7 @@
           e.preventDefault();
           e.stopPropagation();
 
-          console.log(JSON.stringify(target));
-          Footprint.newPage(target)(link.href, link.textContent).then(function () {
+          Footprint.newPage(target)(link.href, link.textContent.trim()).then(function () {
             document.location.href = link.href;
           });
         },
