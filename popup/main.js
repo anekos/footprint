@@ -12,15 +12,9 @@ function withCurrentTab(f) {
 document.querySelector('#bookmark').addEventListener(
   'click',
   function (ev) {
-    withCurrentTab(function (tab) {
-      Footprint.newTarget(tab.url, tab.title).then(function () {
-        chrome.notifications.create({
-          'type': 'basic',
-          'iconUrl': chrome.extension.getURL('../icons/64.png'),
-          'title': 'Footprint',
-          'message': 'New target: ' + (tab.title || tab.url)
-        });
-      });
+    withCurrentTab(async (tab) => {
+      await Footprint.newTarget(tab.url, tab.title);
+      Footprint.notify('New target: ' + (tab.title || tab.url));
     });
   }
 )

@@ -4,7 +4,10 @@ name: Footprint
 version: 0.0.1
 background:
   scripts:
+    - lib/footprint.js
     - background/main.js
+icons:
+  64: icons/64.png
 browser_action:
   default_icon:
     64: icons/64.png
@@ -20,6 +23,7 @@ content_scripts:
     all_frames: false
 permissions:
   - <all_urls>
+  - contextMenus
   - notifications
   - storage
   - tabs

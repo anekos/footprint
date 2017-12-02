@@ -5,8 +5,12 @@
   "version": "0.0.1",
   "background": {
     "scripts": [
+      "lib/footprint.js",
       "background/main.js"
     ]
+  },
+  "icons": {
+    "64": "icons/64.png"
   },
   "browser_action": {
     "default_icon": {
@@ -30,6 +34,7 @@
   ],
   "permissions": [
     "<all_urls>",
+    "contextMenus",
     "notifications",
     "storage",
     "tabs",
