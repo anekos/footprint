@@ -14,7 +14,12 @@ document.querySelector('#bookmark').addEventListener(
   function (ev) {
     withCurrentTab(function (tab) {
       Footprint.newTarget(tab.url, tab.title).then(function () {
-        window.alert('Marked!');
+        chrome.notifications.create({
+          'type': 'basic',
+          'iconUrl': chrome.extension.getURL('../icons/64.png'),
+          'title': 'Footprint',
+          'message': 'New target: ' + (tab.title || tab.url)
+        });
       });
     });
   }
