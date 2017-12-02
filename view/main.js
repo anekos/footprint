@@ -80,3 +80,17 @@ document.querySelector('a#export').addEventListener(
   },
   false
 );
+
+document.querySelector('input#import').addEventListener(
+  'change',
+  async (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.onload = function() {
+      Footprint.importJson(reader.result);
+      document.location.href = document.location.href;
+    };
+    reader.readAsText(file);
+  },
+  false
+);
