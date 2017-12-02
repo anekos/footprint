@@ -69,3 +69,14 @@ browser.runtime.onMessage.addListener((message) => {
     }
   }
 });
+
+
+document.querySelector('a#export').addEventListener(
+  'click',
+  async (e) => {
+    e.preventDefault();
+    var text = await Footprint.exportJson();
+    window.open('data:application/json,' + encodeURIComponent(text));
+  },
+  false
+);
