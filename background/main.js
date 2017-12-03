@@ -1,8 +1,8 @@
 
 browser.contextMenus.create({
   id: 'footprint-remove',
-  title: 'Remove',
-  contexts: ['all'],
+  title: 'Remove this target',
+  contexts: ['link'],
   documentUrlPatterns: [chrome.extension.getURL('*')],
   onclick: async (e) => {
     let targetUrl = e.linkUrl;
