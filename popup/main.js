@@ -16,7 +16,7 @@ document.querySelector('#bookmark').addEventListener(
       try {
         await Footprint.newTarget(tab.url, tab.title);
         let result = await Footprint.sendMessage({command: 'footprint-install-content'}, {url: tab.url});
-        Footprint.notify('New target: ' + (tab.title || tab.url) + result);
+        Footprint.notify('New target: ' + (tab.title || tab.url));
         window.close();
       } catch (e) {
         window.alert(e);
