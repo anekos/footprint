@@ -1,10 +1,12 @@
 (function() {
-  if (window.hasRun) {
-    return;
-  }
-  window.hasRun = true;
+  async function install () {
+    if (window.hasRun) {
+      return;
+    }
+    window.hasRun = true;
 
-  Footprint.getPage(document.location.href).then(function (value) {
+    let value = await Footprint.getPage(document.location.href);
+
     if (!(value && value.target))
       return Promise.reject('No page data');
 
@@ -28,13 +30,14 @@
         false
       );
     }
+  }
 
-    return Promise.resolve(true);
-  });
+  install();
 
   browser.runtime.onMessage.addListener((message) => {
-    if (message.command === "meow") {
-      // DO SOMETHING
+    window.alert(message)
+    if (message.command === 'footprint-install-content') {
+      install();
     }
   });
 
