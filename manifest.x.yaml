@@ -33,4 +33,4 @@ permissions:
 applications:
   gecko:
     id: footprint@snca.net
-    strict_min_version: 57.0
+    strict_min_version: '57.0'
