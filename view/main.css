@@ -1,0 +1,19 @@
+
+
+
+li.target.open::before {
+  content: '\01F5C1\0000A0';
+}
+
+li.target.close::before {
+  content: '\01F5C0\0000A0';
+}
+
+li > .item-action-button {
+  display: none;
+}
+
+li:hover > .item-action-button {
+  display: inline;
+  text-decoration: none;
+}

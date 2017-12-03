@@ -2,16 +2,49 @@
 Footprint.targets().then(function (targets) {
   let root = document.querySelector('#targets');
 
+  function removeItem (e) {
+    let li = e.target.parentNode;
+    let link = li.querySelector('a');
+    let name = link.textContent;
+    let itemType = li.getAttribute('data-item-type');
+
+    if (!window.confirm('Remove: ' + name)) {
+      return;
+    }
+
+    ({
+      page: () => {
+      },
+      target: async () => {
+        let root = document.querySelector('#targets');
+        root.removeChild(li);
+        await Footprint.removeTarget(link.href);
+      }
+    }[itemType] || (() => false))();
+
+  }
+
+  function addActionButtons (li) {
+    let remove = document.createElement('a');
+    remove.textContent = '\u00a0\u274E';
+    remove.setAttribute('class', 'item-action-button');
+    remove.setAttribute('href', '#');
+    remove.addEventListener('click', removeItem, false);
+    li.appendChild(remove);
+  }
+
   for (let target of targets) {
     let li = document.createElement('li');
     li.setAttribute('data-target-url', target.url);
     li.setAttribute('class', 'target close');
+    li.setAttribute('data-item-type', 'target');
 
     let a = document.createElement('a');
     a.setAttribute('href', target.url);
     a.textContent = target.title || 'NO TITLE';
 
     li.appendChild(a);
+    addActionButtons(li);
 
     a.addEventListener(
       'click',
@@ -35,11 +68,17 @@ Footprint.targets().then(function (targets) {
           let pages = target.pages.reverse();
           for (let pageUrl of pages) {
             let page = await Footprint.getPage(pageUrl);
+
             let pageElement = document.createElement('li');
+            pageElement.setAttribute('data-item-type', 'page');
+
             let pageLink = document.createElement('a');
             pageLink.setAttribute('href', pageUrl);
             pageLink.textContent = page.title || pageUrl;
+
             pageElement.appendChild(pageLink);
+            addActionButtons(pageElement);
+
             pageLink.addEventListener(
               'click',
               () => Footprint.refreshTarget(target.url),
@@ -63,33 +102,6 @@ Footprint.targets().then(function (targets) {
 
 browser.runtime.onMessage.addListener((message) => {
   ({
-    'footprint-remove': async () => {
-      let root = document.querySelector('#targets');
-      let targets = root.querySelectorAll('li');
-
-      if (message.confirmation) {
-        if (!window.confirm('Remove: ' + message.name))
-          return false;
-
-        // if (window.confirm('Remove: ' + message.name)) {
-        //   message.confirmation = false;
-        //   await Footprint.sendMessage({command: 'footprint-refresh'}, false);
-        //   console.log(message);
-        // }
-        // return;
-      }
-
-      for (let target of targets) {
-        let name = target.textContent;
-        if (target.getAttribute('data-target-url') == message.targetUrl) {
-          (async () => {
-            root.removeChild(target);
-            await Footprint.removeTarget(message.targetUrl);
-            await Footprint.notify('Remove: ' + name);
-          })();
-        }
-      }
-    },
     'footprint-refresh': () => {
       document.location.href = document.location.href;
     }
