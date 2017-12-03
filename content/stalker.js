@@ -37,7 +37,6 @@
   install();
 
   browser.runtime.onMessage.addListener((message) => {
-    window.alert(message)
     if (message.command === 'footprint-install-content') {
       install();
     }
