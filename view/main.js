@@ -5,9 +5,12 @@ Footprint.targets().then(function (targets) {
   for (let target of targets) {
     let li = document.createElement('li');
     li.setAttribute('data-target-url', target.url);
+    li.setAttribute('class', 'target close');
+
     let a = document.createElement('a');
     a.setAttribute('href', target.url);
     a.textContent = target.title || 'NO TITLE';
+
     li.appendChild(a);
 
     a.addEventListener(
@@ -17,8 +20,12 @@ Footprint.targets().then(function (targets) {
 
         let pagesContainer = li.querySelector('.pages-container');
         if (pagesContainer) {
-          return DOM.toggleDisplay(pagesContainer);
+          DOM.toggleDisplay(pagesContainer);
+          DOM.toggleClass(li, 'open', 'close');
+          return;
         }
+
+        DOM.toggleClass(li, 'open', 'close');
 
         pagesContainer = document.createElement('ol');
         pagesContainer.setAttribute('class', 'pages-container');
