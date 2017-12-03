@@ -5,6 +5,7 @@ Footprint.targets().then(function (targets) {
   function removeItem (e) {
     let li = e.target.parentNode;
     let link = li.querySelector('a');
+    let url = link.href;
     let name = link.textContent;
     let itemType = li.getAttribute('data-item-type');
 
@@ -13,12 +14,14 @@ Footprint.targets().then(function (targets) {
     }
 
     ({
-      page: () => {
+      page: async () => {
+        await Footprint.removePage(url);
+        li.parentNode.removeChild(li);
       },
       target: async () => {
         let root = document.querySelector('#targets');
         root.removeChild(li);
-        await Footprint.removeTarget(link.href);
+        await Footprint.removeTarget(url);
       }
     }[itemType] || (() => false))();
 
