@@ -1,4 +1,29 @@
 (function() {
+
+  function makeModifyOnClick (target) {
+    function makeOnClick (link) {
+      return async function onClick (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        Footprint.debug('newPage/target', target);
+
+        await Footprint.newPage(target)(link.href, link.textContent.trim());
+        document.location.href = link.href;
+      };
+    }
+
+    return function modifyOnClick (root) {
+      let links = root.querySelectorAll('a');
+      for (let link of links) {
+        if (typeof link.href !== 'string')
+          continue;
+        let onClick = makeOnClick(link);
+        link.addEventListener('click', onClick, false);
+      }
+    };
+  }
+
   async function install () {
     if (window.hasRun) {
       return;
@@ -13,23 +38,22 @@
 
     let target = value.target;
 
-    let links = document.querySelectorAll('a');
-    for (let link of links) {
-      if (typeof link.href !== 'string')
-        continue;
+    Footprint.debug('install/target', target);
 
-      link.addEventListener(
-        'click',
-        async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+    let modifyOnClick = makeModifyOnClick(target);
 
-          await Footprint.newPage(target)(link.href, link.textContent.trim());
-          document.location.href = link.href;
-        },
-        false
-      );
-    }
+    modifyOnClick(document);
+
+    var observer = new MutationObserver((records, observer) => {
+      Footprint.debug('install/MutationObserver', target);
+      records.forEach((it) => {
+        modifyOnClick(it.target);
+      })
+    });
+
+    observer.observe(document.querySelector('body'), {
+      childList: true,
+    });
 
     return Footprint.updateTitle(url, document.title);
   }
