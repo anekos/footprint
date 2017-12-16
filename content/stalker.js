@@ -1,26 +1,25 @@
 (function() {
 
   function makeModifyOnClick (target) {
-    function makeOnClick (link) {
-      return async function onClick (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    async function onClick (e) {
+      Footprint.debug('newPage/target', target);
 
-        Footprint.debug('newPage/target', target);
+      e.preventDefault();
+      e.stopPropagation();
 
-        await Footprint.newPage(target)(link.href, link.textContent.trim());
-        document.location.href = link.href;
-      };
-    }
+      let url = e.target.href;
+      let title = e.target.textContent.trim();
+
+      await Footprint.newPage(target)(url, title);
+      document.location.href = url;
+    };
 
     return function modifyOnClick (root) {
-      let links = root.querySelectorAll('a');
-      for (let link of links) {
-        if (typeof link.href !== 'string')
-          continue;
-        let onClick = makeOnClick(link);
-        link.addEventListener('click', onClick, false);
-      }
+      root.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' && typeof e.target.href === 'string') {
+          return onClick(e);
+        }
+      }, false);
     };
   }
 
@@ -42,18 +41,7 @@
 
     let modifyOnClick = makeModifyOnClick(target);
 
-    modifyOnClick(document);
-
-    var observer = new MutationObserver((records, observer) => {
-      Footprint.debug('install/MutationObserver', target);
-      records.forEach((it) => {
-        modifyOnClick(it.target);
-      })
-    });
-
-    observer.observe(document.querySelector('body'), {
-      childList: true,
-    });
+    modifyOnClick(document.querySelector('body'));
 
     return Footprint.updateTitle(url, document.title);
   }
