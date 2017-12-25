@@ -84,7 +84,7 @@ Footprint.targets().then(function (targets) {
 
             pageLink.addEventListener(
               'click',
-              () => Footprint.refreshTarget(target.url),
+              () => Footprint.refreshTarget(target.url, 'lastClickedAt'),
               false
             );
             pagesContainer.appendChild(pageElement);
