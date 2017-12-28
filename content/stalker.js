@@ -1,8 +1,8 @@
 (function() {
 
-  function makeModifyOnClick (target) {
+  function makeModifyOnClick (targetUrl) {
     async function onClick (e) {
-      Footprint.debug('newPage/target', target);
+      Footprint.debug('newPage/target', targetUrl);
 
       e.preventDefault();
       e.stopPropagation();
@@ -10,7 +10,10 @@
       let url = e.target.href;
       let title = e.target.textContent.trim();
 
-      await Footprint.newPage(target)(url, title);
+      let target = await Footprint.getTarget(targetUrl);
+      if (await Footprint.newPage(targetUrl)(url, title)) {
+        await Footprint.notify('New page for ' + target.title);
+      }
       document.location.href = url;
     };
 
@@ -32,14 +35,14 @@
     let url = document.location.href;
     let value = await Footprint.getPage(url);
 
-    if (!(value && value.target))
+    if (!(value && value.targetUrl))
       return Promise.reject('No page data');
 
-    let target = value.target;
+    let targetUrl = value.targetUrl;
 
-    Footprint.debug('install/target', target);
+    Footprint.debug('install/target', targetUrl);
 
-    let modifyOnClick = makeModifyOnClick(target);
+    let modifyOnClick = makeModifyOnClick(targetUrl);
 
     modifyOnClick(document.querySelector('body'));
 
