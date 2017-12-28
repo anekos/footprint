@@ -30,13 +30,14 @@
     if (window.hasRun) {
       return;
     }
-    window.hasRun = true;
 
     let url = document.location.href;
     let value = await Footprint.getPage(url);
 
     if (!(value && value.targetUrl))
       return Promise.reject('No page data');
+
+    window.hasRun = true;
 
     let targetUrl = value.targetUrl;
 
