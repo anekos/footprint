@@ -1,7 +1,7 @@
 description: Bookmark with footprint
 manifest_version: 2
 name: Footprint
-version: 0.0.5
+version: 0.0.6
 background:
   scripts:
     - lib/footprint.js
