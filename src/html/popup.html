@@ -3,37 +3,54 @@
 <html>
 
   <head>
-    <meta charset="utf-8">
     <style>
-      html, body {
-        width: 100px;
+      body {
+        width: 400px;
+        padding: 1em;
       }
-
-      .hidden {
-        display: none;
-      }
-
-      .button {
-        margin: 3% auto;
-        padding: 4px;
-        text-align: center;
-        font-size: 1em;
-        cursor: pointer;
-        background-color: lightgrey;
-        color: darkgreen;
+      #tags {
+        max-height: 10em;
+        overflow-y: auto;
       }
     </style>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
 
   <body>
-    <div id="popup-content">
-      <div id="bookmark" class="button">Bookmark</div>
-      <div id="open" class="button">Open</div>
-      <div id="test" class="button">Test</div>
+    <div id="app" class="container">
+
+      <div class="card">
+        <div class="row card-body">
+          <div id="tags" class="col">
+            <div class="custom-control custom-checkbox"
+                 v-for="(tag, index) in tags">
+              <input type="checkbox"
+                     class="custom-control-input tag-check"
+                     :id="'tag' + index"
+                     v-model="checked[tag]">
+              <label class="custom-control-label" :for="'tag' + index">{{ tag }}</label>
+            </div>
+          </div>
+          <div class="col">
+            <div id="add-bookmark" class="col btn btn-primary">Bookmark</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row card-body">
+          <div id="open" class="col btn btn-primary">Open</div>
+        </div>
+      </div>
+
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="/js/popup.js"></script>
   </body>
-
 </html>
 

@@ -1,12 +1,11 @@
 
 
 export default (function () {
-
   function getTime() {
     return new Date().getTime();
   }
 
-  return {
+  let Footprint = {
     Name: {
       Page: function (url) {
         return 'page:' + url.replace(/^https?:\/\//g, '');
@@ -21,13 +20,15 @@ export default (function () {
         let value = await browser.storage.local.get({targets: {}});
         let target = value.targets[targetUrl];
         if (target) {
-          if (target.pages.some((it) => it === pageUrl))
+          if (target.pages.some((it) => it.url === pageUrl))
             return false;
-          target.pages.push(pageUrl);
+          target.pages.push({
+            url: pageUrl,
+            title: pageTitle,
+          });
           target.lastUpdatedAt = getTime();
           value[Footprint.Name.Page(pageUrl)] = {
-            title: pageTitle,
-            targetUrl: targetUrl
+            targetUrl: targetUrl,
           };
           await browser.storage.local.set(value);
           return true;
@@ -46,14 +47,15 @@ export default (function () {
       return browser.storage.local.remove(pageUrl);
     },
 
-    newTarget: async function (url, title) {
+    newTarget: async function (url, title, tags) {
       let value = await browser.storage.local.get({targets: {}});
       if (value.targets[url]) {
         return Promise.reject('Already bookmarked');
       }
       value.targets[url] = {
         title: title,
-        pages: []
+        pages: [],
+        tags: tags,
       };
       await browser.storage.local.set(value);
       return Footprint.newPage(url)(url, title);
@@ -67,7 +69,7 @@ export default (function () {
     targets: async function () {
       let value = await browser.storage.local.get({targets: {}});
 
-      let targets = [2];
+      let targets = [];
 
       for (let url in value.targets) {
         let target = value.targets[url];
@@ -154,7 +156,25 @@ export default (function () {
       for (let tab of tabs) {
         await browser.tabs.sendMessage(tab.id, message);
       }
-    }
+    },
+
+    Helper: {
+      extractTags: (targets) => {
+        let tags = {};
+        targets.forEach((target) => target.tags && target.tags.forEach((tag) => tags[tag] = true));
+        return Object.keys(tags);
+      },
+
+      attachTagSet: (targets) => {
+        targets.forEach((target) => {
+          let set = {};
+          target.tags.forEach((tag) => set[tag] = true);
+          target.tagSet = set;
+        });
+      },
+    },
   };
 
+
+  return Footprint;
 })();

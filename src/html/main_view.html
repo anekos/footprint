@@ -2,31 +2,92 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="../icons/64.png">
-    <link rel="stylesheet" href="main.css"/>
-
+    <link rel="icon" type="image/png" href="/icon/64.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Footprints</title>
+    <title>Footprint</title>
   </head>
 
   <body>
 
-    <h1>Footprint 7</h1>
-
-    <ol id="targets">
-    </ol>
+    <h1>Footprint</h1>
 
     <div id="app" class="container">
+
       <div class="row">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" href=""></a>
-          </li>
-        </ul>
+        <div class="col-xl-1">
+          <!-- MENU -->
+        </div>
+
+        <div class="col-xl-11">
+
+          <ul class="nav nav-tabs">
+            <li class="nav-item"
+                v-for="(tag, index) in tags">
+              <a class="nav-link"
+                 data-toggle="tab"
+                 :class="{active: index == 0}"
+                 :href=" '#tab' + index ">
+                {{ tag || 'NONE' }}
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div v-for="(tag, tagIndex) in tags"
+                 class="tab-pane"
+                 :id=" 'tab' + tagIndex "
+                 :class="{active: tagIndex == 0}">
+              <div v-for="(target, index) in targets"
+                   v-if="!tag || target.tags.includes(tag)">
+                <div class="card">
+                  <a data-toggle="collapse"
+                     class="card-header"
+                     role="button"
+                     aria-expanded="false"
+                     :href="'#target' + tagIndex + '-' + index"
+                     :aria-controls="'target' + tagIndex + '-' + index">
+                    {{ target.title }}
+                  </a>
+                  <div class="collapse"
+                       :data-parent="'#tab' + tagIndex"
+                       :id="'target' + tagIndex + '-' + index">
+                    <div class="card-body">
+                      <div class="card-title">
+                        <ol reversed>
+                          <li v-for="page in target.pages.slice().reverse()">
+                            <a :href="page.url">{{ page.title }}</a>
+                          </li>
+                        </ol>
+                      </div>
+                      <div class="card-text">
+                        {{ target.tags.join(', ') }}
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="custom-control custom-checkbox custom-control-inline"
+                           v-for="(tag, index) in tags"
+                           v-if="tag">
+                        <input type="checkbox"
+                               class="custom-control-input tag-check"
+                               :id="'tag' + index"
+                               v-model="target.tagSet[tag]">
+                        <label class="custom-control-label" :for="'tag' + index">{{ tag }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="/js/main_view.js"></script>
   </body>
 
