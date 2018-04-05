@@ -19,6 +19,19 @@
     "default_title": "Footprint",
     "default_popup": "popup/main.html"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "lib/footprint.js",
+        "content/stalker.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
   "options_ui": {
     "page": "view/option.html"
   },
