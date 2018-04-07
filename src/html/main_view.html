@@ -46,29 +46,23 @@
                      :aria-controls="id('target', tagIndex, index)">
                     {{ target.title }}
                   </a>
-                  <div class="collapse"
+                  <div class="collapse card-body"
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
-                    <div class="card-body">
-                      <div class="card-title">
-                        <ol reversed>
-                          <li v-for="page in target.pages.slice().reverse()">
-                            <a :href="page.url">{{ page.title }}</a>
-                          </li>
-                        </ol>
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <div class="custom-control custom-checkbox custom-control-inline"
-                           v-for="(tag, tagIndex) in tags"
-                           v-if="tag.real">
-                        <input type="checkbox"
-                               class="custom-control-input tag-check"
-                               v-model="target.tags"
-                               :id="id('tag', index, tagIndex)"
-                               :value="tag.name">
-                        <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
-                      </div>
+                    <ol reversed>
+                      <li v-for="page in target.pages.slice().reverse()">
+                        <a :href="page.url">{{ page.title }}</a>
+                      </li>
+                    </ol>
+                    <div class="custom-control custom-checkbox custom-control-inline"
+                         v-for="(tag, tagIndex) in tags"
+                         v-if="tag.real">
+                      <input type="checkbox"
+                             class="custom-control-input tag-check"
+                             v-model="target.tags"
+                             :id="id('tag', index, tagIndex)"
+                             :value="tag.name">
+                      <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
                     </div>
                   </div>
                 </div>
