@@ -173,7 +173,7 @@ export default (function () {
       extractTags: (targets) => {
         let tags = {};
         targets.forEach((target) => target.tags && target.tags.forEach((tag) => tags[tag] = true));
-        return Object.keys(tags);
+        return Object.keys(tags).sort();
       },
 
       attachTagSet: (targets) => {
