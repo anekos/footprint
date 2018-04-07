@@ -12,14 +12,11 @@
 
     <h1>Footprint</h1>
 
-    <div id="app" class="container">
+    <div id="app" class="container-fluid">
 
       <div class="row">
-        <div class="col-xl-1">
-          <!-- MENU -->
-        </div>
 
-        <div class="col-xl-11">
+        <div class="col-xl-10 col-md-11 col-xs-11">
 
           <ul class="nav nav-tabs">
             <li class="nav-item"
@@ -28,7 +25,7 @@
                  data-toggle="tab"
                  :class="{active: index == 0}"
                  :href="id('#tab', index) ">
-                {{ tag || 'NONE' }}
+                {{ tag.name }}
               </a>
             </li>
           </ul>
@@ -39,7 +36,7 @@
                  :id="id('tab', tagIndex)"
                  :class="{active: tagIndex == 0}">
               <div v-for="(target, index) in targets"
-                   v-if="!tag || target.tagSet[tag]">
+                   v-if="tag.isIn(target.tags)">
                 <div class="card">
                   <a data-toggle="collapse"
                      class="card-header"
@@ -60,19 +57,17 @@
                           </li>
                         </ol>
                       </div>
-                      <div class="card-text">
-                        {{ target.tags.join(', ') }}
-                      </div>
                     </div>
                     <div class="card-footer">
                       <div class="custom-control custom-checkbox custom-control-inline"
                            v-for="(tag, tagIndex) in tags"
-                           v-if="tag">
+                           v-if="tag.real">
                         <input type="checkbox"
                                class="custom-control-input tag-check"
+                               v-model="target.tags"
                                :id="id('tag', index, tagIndex)"
-                               v-model="target.tagSet[tag]">
-                        <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag }}</label>
+                               :value="tag.name">
+                        <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
                       </div>
                     </div>
                   </div>
@@ -82,6 +77,12 @@
           </div>
 
         </div>
+
+        <div class="col-xl-2 col-md-1 col-xs-1">
+          <input id="new-tag-name" type="text" class="form-control" placeholder="New tag name">
+          <button type="button" id="new-tag-button" class="btn btn-secondary btn-block">New tag</button>
+        </div>
+
       </div>
     </div>
 

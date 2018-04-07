@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Footprint from './footprint.js'
 import Util from './util.js'
+import UI from './ui_common.js'
 
 
 async function main() {
@@ -46,6 +47,20 @@ async function main() {
     }
   );
 
+  document.querySelector('#new-tag-button').addEventListener(
+    'click',
+    () => {
+      let element = document.querySelector('#new-tag-name');
+      if (element) {
+        let name = element.value.trim();
+        if (name.length) {
+          app.tags.push(name);
+          app.checked[name] = true;
+          element.value = '';
+        }
+      }
+    });
+
   document.querySelector('#open').addEventListener(
     'click',
     function (ev) {
@@ -55,6 +70,7 @@ async function main() {
     }
   );
 
+  UI.setupNewTagButton(app);
 }
 
 

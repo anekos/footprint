@@ -175,14 +175,6 @@ export default (function () {
         targets.forEach((target) => target.tags && target.tags.forEach((tag) => tags[tag] = true));
         return Object.keys(tags).sort();
       },
-
-      attachTagSet: (targets) => {
-        targets.forEach((target) => {
-          let set = {};
-          target.tags.forEach((tag) => set[tag] = true);
-          target.tagSet = set;
-        });
-      },
     },
   };
 

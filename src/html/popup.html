@@ -22,8 +22,11 @@
     <div id="app" class="container">
 
       <div class="card">
-        <div class="row card-body">
+        <div class="form-row card-body">
           <div id="tags" class="col">
+            <div v-if="tags.length == 0">
+              Please add a new tag,<br /> if you want.
+            </div>
             <div class="custom-control custom-checkbox"
                  v-for="(tag, index) in tags">
               <input type="checkbox"
@@ -34,7 +37,9 @@
             </div>
           </div>
           <div class="col">
-            <div id="add-bookmark" class="col btn btn-primary">Bookmark</div>
+            <button id="add-bookmark" class="btn btn-primary btn-block">Bookmark</button>
+            <input id="new-tag-name" type="text" class="form-control" placeholder="New tag name">
+            <button type="button" id="new-tag-button" class="btn btn-secondary btn-block">Add new tag</div>
           </div>
         </div>
       </div>
