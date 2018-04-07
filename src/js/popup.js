@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import Footprint from './footprint.js'
+import Util from './util.js'
 
 
 async function main() {
@@ -19,6 +20,7 @@ async function main() {
     data: {
       tags: [],
       checked: {},
+      methods: Util.Methods(),
     }
   });
 
@@ -30,7 +32,7 @@ async function main() {
     function (ev) {
       withCurrentTab(async (tab) => {
         try {
-          let tags = Object.keys(app.checked);
+          let tags = Util.trues(app.checked);
           await Footprint.newTarget(tab.url, tab.title, tags);
 
           await Footprint.sendMessage({command: 'footprint-install-content'}, {url: tab.url});

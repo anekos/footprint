@@ -90,8 +90,19 @@ export default (function () {
       return value[key];
     },
 
-    updateTitle: async function (url, title) {
-      let key = Footprint.Name.Page(url);
+    updateTags: async function (targetUrl, tags) {
+      let value = await browser.storage.local.get({targets: {}});
+      let target = value.targets[targetUrl];
+      if (target) {
+        target.tags = tags;
+        return browser.storage.local.set(value);
+      } else {
+        return false;
+      }
+    },
+
+    updateTitle: async function (pageUrl, title) {
+      let key = Footprint.Name.Page(pageUrl);
       let value = await browser.storage.local.get(key)
       let page = value[key];
       page.title = title;

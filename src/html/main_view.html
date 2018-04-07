@@ -27,7 +27,7 @@
               <a class="nav-link"
                  data-toggle="tab"
                  :class="{active: index == 0}"
-                 :href=" '#tab' + index ">
+                 :href="id('#tab', index) ">
                 {{ tag || 'NONE' }}
               </a>
             </li>
@@ -36,22 +36,22 @@
           <div class="tab-content">
             <div v-for="(tag, tagIndex) in tags"
                  class="tab-pane"
-                 :id=" 'tab' + tagIndex "
+                 :id="id('tab', tagIndex)"
                  :class="{active: tagIndex == 0}">
               <div v-for="(target, index) in targets"
-                   v-if="!tag || target.tags.includes(tag)">
+                   v-if="!tag || target.tagSet[tag]">
                 <div class="card">
                   <a data-toggle="collapse"
                      class="card-header"
                      role="button"
                      aria-expanded="false"
-                     :href="'#target' + tagIndex + '-' + index"
-                     :aria-controls="'target' + tagIndex + '-' + index">
+                     :href="id('#target',tagIndex, index)"
+                     :aria-controls="id('target', tagIndex, index)">
                     {{ target.title }}
                   </a>
                   <div class="collapse"
-                       :data-parent="'#tab' + tagIndex"
-                       :id="'target' + tagIndex + '-' + index">
+                       :data-parent="id('#tab', tagIndex)"
+                       :id="id('target', tagIndex, index)">
                     <div class="card-body">
                       <div class="card-title">
                         <ol reversed>
@@ -66,13 +66,13 @@
                     </div>
                     <div class="card-footer">
                       <div class="custom-control custom-checkbox custom-control-inline"
-                           v-for="(tag, index) in tags"
+                           v-for="(tag, tagIndex) in tags"
                            v-if="tag">
                         <input type="checkbox"
                                class="custom-control-input tag-check"
-                               :id="'tag' + index"
+                               :id="id('tag', index, tagIndex)"
                                v-model="target.tagSet[tag]">
-                        <label class="custom-control-label" :for="'tag' + index">{{ tag }}</label>
+                        <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag }}</label>
                       </div>
                     </div>
                   </div>
