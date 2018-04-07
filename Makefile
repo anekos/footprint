@@ -1,4 +1,6 @@
 
+.PHONY: dist
+
 build: dist
 	(cd dist ; zip -r ../footprint.zip .)
 
@@ -7,3 +9,6 @@ dist:
 
 watch:
 	npm run watch
+
+install:
+	npm install
