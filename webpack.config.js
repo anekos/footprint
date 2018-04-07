@@ -1,5 +1,6 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 
 
 module.exports = {
@@ -24,6 +25,9 @@ module.exports = {
       {from: 'src/icon/64.png', to: 'icon'},
       {from: 'src/meta/manifest.json'},
     ], {}),
+    new ZipPlugin({
+      filename: 'footprint.zip'
+    }),
   ],
   resolve: {
     alias: {
