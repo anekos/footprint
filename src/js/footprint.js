@@ -1,12 +1,11 @@
 
 
-Footprint = (function () {
-
+export default (function () {
   function getTime() {
     return new Date().getTime();
   }
 
-  return {
+  let Footprint = {
     Name: {
       Page: function (url) {
         return 'page:' + url.replace(/^https?:\/\//g, '');
@@ -21,13 +20,15 @@ Footprint = (function () {
         let value = await browser.storage.local.get({targets: {}});
         let target = value.targets[targetUrl];
         if (target) {
-          if (target.pages.some((it) => it === pageUrl))
+          if (target.pages.some((it) => it.url === pageUrl))
             return false;
-          target.pages.push(pageUrl);
+          target.pages.push({
+            url: pageUrl,
+            title: pageTitle,
+          });
           target.lastUpdatedAt = getTime();
           value[Footprint.Name.Page(pageUrl)] = {
-            title: pageTitle,
-            targetUrl: targetUrl
+            targetUrl: targetUrl,
           };
           await browser.storage.local.set(value);
           return true;
@@ -46,14 +47,15 @@ Footprint = (function () {
       return browser.storage.local.remove(pageUrl);
     },
 
-    newTarget: async function (url, title) {
+    newTarget: async function (url, title, tags) {
       let value = await browser.storage.local.get({targets: {}});
       if (value.targets[url]) {
         return Promise.reject('Already bookmarked');
       }
       value.targets[url] = {
         title: title,
-        pages: []
+        pages: [],
+        tags: tags,
       };
       await browser.storage.local.set(value);
       return Footprint.newPage(url)(url, title);
@@ -88,8 +90,19 @@ Footprint = (function () {
       return value[key];
     },
 
-    updateTitle: async function (url, title) {
-      let key = Footprint.Name.Page(url);
+    updateTags: async function (targetUrl, tags) {
+      let value = await browser.storage.local.get({targets: {}});
+      let target = value.targets[targetUrl];
+      if (target) {
+        target.tags = tags;
+        return browser.storage.local.set(value);
+      } else {
+        return false;
+      }
+    },
+
+    updateTitle: async function (pageUrl, title) {
+      let key = Footprint.Name.Page(pageUrl);
       let value = await browser.storage.local.get(key)
       let page = value[key];
       page.title = title;
@@ -154,7 +167,17 @@ Footprint = (function () {
       for (let tab of tabs) {
         await browser.tabs.sendMessage(tab.id, message);
       }
-    }
+    },
+
+    Helper: {
+      extractTags: (targets) => {
+        let tags = {};
+        targets.forEach((target) => target.tags && target.tags.forEach((tag) => tags[tag] = true));
+        return Object.keys(tags).sort();
+      },
+    },
   };
 
+
+  return Footprint;
 })();

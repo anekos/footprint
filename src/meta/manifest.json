@@ -3,21 +3,20 @@
   "manifest_version": 2,
   "name": "Footprint",
   "version": "0.0.6",
+  "icons": {
+    "64": "icon/64.png"
+  },
   "background": {
     "scripts": [
-      "lib/footprint.js",
-      "background/main.js"
+      "js/background.js"
     ]
-  },
-  "icons": {
-    "64": "icons/64.png"
   },
   "browser_action": {
     "default_icon": {
-      "64": "icons/64.png"
+      "64": "icon/64.png"
     },
     "default_title": "Footprint",
-    "default_popup": "popup/main.html"
+    "default_popup": "html/popup.html"
   },
   "content_scripts": [
     {
@@ -25,15 +24,14 @@
         "<all_urls>"
       ],
       "js": [
-        "lib/footprint.js",
-        "content/stalker.js"
+        "js/content.js"
       ],
       "run_at": "document_end",
       "all_frames": false
     }
   ],
   "options_ui": {
-    "page": "view/option.html"
+    "page": "html/option.html"
   },
   "permissions": [
     "<all_urls>",
@@ -48,5 +46,6 @@
       "id": "footprint@snca.net",
       "strict_min_version": "57.0"
     }
-  }
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://code.jquery.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com; object-src 'self';"
 }

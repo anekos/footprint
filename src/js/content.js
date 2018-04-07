@@ -1,4 +1,7 @@
-(function() {
+
+import Footprint from './footprint.js'
+
+async function main () {
 
   function makeModifyOnClick (targetUrl) {
     async function onClick (e) {
@@ -58,5 +61,7 @@
     }
   });
 
-})();
+}
 
+
+main();

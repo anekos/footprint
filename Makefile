@@ -1,8 +1,9 @@
 
-.PHONY: footprint.zip
-
-footprint.zip: dist
-	git archive -o dist/footprint.zip HEAD
+build: dist
+	(cd dist ; zip -r ../footprint.zip .)
 
 dist:
-	mkdir dist
+	npm run build
+
+watch:
+	npm run watch

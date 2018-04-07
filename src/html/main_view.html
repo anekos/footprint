@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="/icon/64.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Footprint</title>
+  </head>
+
+  <body>
+
+    <h1>Footprint</h1>
+
+    <div id="app" class="container-fluid">
+
+      <div class="row">
+
+        <div class="col-xl-10 col-md-11 col-xs-11">
+
+          <ul class="nav nav-tabs">
+            <li class="nav-item"
+                v-for="(tag, index) in tags">
+              <a class="nav-link"
+                 data-toggle="tab"
+                 :class="{active: index == 0}"
+                 :href="id('#tab', index) ">
+                {{ tag.name }}
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div v-for="(tag, tagIndex) in tags"
+                 class="tab-pane"
+                 :id="id('tab', tagIndex)"
+                 :class="{active: tagIndex == 0}">
+              <div v-for="(target, index) in targets"
+                   v-if="tag.isIn(target.tags)">
+                <div class="card">
+                  <a data-toggle="collapse"
+                     class="card-header"
+                     role="button"
+                     aria-expanded="false"
+                     :href="id('#target',tagIndex, index)"
+                     :aria-controls="id('target', tagIndex, index)">
+                    {{ target.title }}
+                  </a>
+                  <div class="collapse card-body"
+                       :data-parent="id('#tab', tagIndex)"
+                       :id="id('target', tagIndex, index)">
+                    <ol reversed>
+                      <li v-for="page in target.pages.slice().reverse()">
+                        <a :href="page.url">{{ page.title }}</a>
+                      </li>
+                    </ol>
+                    <div class="custom-control custom-checkbox custom-control-inline"
+                         v-for="(tag, tagIndex) in tags"
+                         v-if="tag.real">
+                      <input type="checkbox"
+                             class="custom-control-input tag-check"
+                             v-model="target.tags"
+                             :id="id('tag', index, tagIndex)"
+                             :value="tag.name">
+                      <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-2 col-md-1 col-xs-1">
+          <input id="new-tag-name" type="text" class="form-control" placeholder="New tag name">
+          <button type="button" id="new-tag-button" class="btn btn-secondary btn-block">New tag</button>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/js/main_view.js"></script>
+  </body>
+
+</html>
+
