@@ -1,5 +1,6 @@
 
 import Vue from 'vue'
+import Bootstrap from 'bootstrap'
 import Footprint from './footprint.js'
 import Util from './util.js'
 import UI from './ui_common.js'
