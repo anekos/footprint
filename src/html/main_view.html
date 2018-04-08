@@ -60,9 +60,15 @@
                              class="custom-control-input tag-check"
                              v-model="target.tags"
                              :id="id('tag', index, tagIndex)"
-                             :value="tag.name">
+                             :value="tag.name"
+                             v-on:click="$set(target, 'tagsUpdated', true)">
                       <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
                     </div>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            :class="id('update-tag-button', index)"
+                            :disabled="!target.tagsUpdated"
+                            v-on:click="updateTags(target)">Update</button>
                   </div>
                 </div>
               </div>

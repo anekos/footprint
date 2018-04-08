@@ -25,15 +25,12 @@ async function main() {
         return result.concat(this.pseudoTags || []);
       }
     },
-    methods: Util.Methods(),
-  });
-
-  targets.forEach((target, index) => {
-    app.$watch('targets.' + index + '.tags', async (newVal, oldVal) => {
-      await Footprint.updateTags(target.url, newVal);
-    }, {
-      deep: true
-    });
+    methods: Util.Methods({
+      updateTags: async function (target) {
+        await Footprint.updateTags(target.url, target.tags);
+        app.$set(target, 'tagsUpdated', false);
+      }
+    }),
   });
 
   document.querySelector('#new-tag-button').addEventListener(

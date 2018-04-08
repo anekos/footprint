@@ -15,11 +15,13 @@ export default (function () {
       return result;
     },
 
+    id: (name, ...indices) => {
+      return [name].concat(indices).join('-');
+    },
+
     Methods: (original) => {
       return Object.assign({}, original || {}, {
-        id: (name, ...indices) => {
-          return [name].concat(indices).join('-');
-        },
+        id: Util.id,
       });
     }
   };
