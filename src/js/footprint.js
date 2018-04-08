@@ -42,9 +42,15 @@ export default (function () {
       let page = await Footprint.getPage(pageUrl);
       let value = await browser.storage.local.get({targets: {}});
       let target = value.targets[page.targetUrl];
-      target.pages = target.pages.filter((it) => it !== pageUrl);
+      target.pages = target.pages.filter(page => page.url !== pageUrl);
       await browser.storage.local.set(value);
-      return browser.storage.local.remove(pageUrl);
+      try {
+        await browser.storage.local.remove(Footprint.Name.Page(pageUrl));
+        return true;
+      } catch (e) {
+        console.warn('Page entry not found: ' + pageUrl);
+        return false;
+      }
     },
 
     newTarget: async function (url, title, tags) {

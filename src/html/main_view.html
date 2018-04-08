@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/icon/64.png">
     <link rel="stylesheet" href="/css/bootstrap.css">
+    <style>
+      .remove-page-button {
+        display: none;
+      }
+      li:hover > .remove-page-button {
+        display: inline;
+      }
+    </style>
     <title>Footprint</title>
   </head>
 
@@ -49,8 +57,12 @@
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
                     <ol reversed>
-                      <li v-for="page in target.pages.slice().reverse()">
+                      <li v-for="(page, pageIndex) in target.pages.slice().reverse()">
                         <a :href="page.url">{{ page.title }}</a>
+                        <button href="#"
+                                class="btn btn-sm btn-danger remove-page-button"
+                           v-on:click="removePage(target, page, target.pages.length - pageIndex - 1)"
+                           v-if="target.pages.length > 1">❌</button>
                       </li>
                     </ol>
                     <div class="custom-control custom-checkbox custom-control-inline"

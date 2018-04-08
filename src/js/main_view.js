@@ -29,6 +29,13 @@ async function main() {
       updateTags: async function (target) {
         await Footprint.updateTags(target.url, target.tags);
         app.$set(target, 'tagsUpdated', false);
+      },
+      removePage: async function (target, page, pageIndex) {
+        if (!confirm('Remove this page? (' + page.title + ')'))
+          return;
+        await Footprint.removePage(page.url);
+        target.pages.splice(pageIndex, 1);
+        console.info(target.pages.length);
       }
     }),
   });
