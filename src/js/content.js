@@ -1,17 +1,18 @@
 
 import Footprint from './footprint.js'
+import jQuery from 'jquery'
 
 async function main () {
 
   function makeModifyOnClick (targetUrl) {
-    async function onClick (e) {
+    async function onClick (e, element) {
       Footprint.debug('newPage/target', targetUrl);
 
       e.preventDefault();
       e.stopPropagation();
 
-      let url = e.target.href;
-      let title = e.target.textContent.trim();
+      let title = element.textContent.trim();
+      let url = element.href;
 
       let target = await Footprint.getTarget(targetUrl);
       if (await Footprint.newPage(targetUrl)(url, title)) {
@@ -22,8 +23,9 @@ async function main () {
 
     return function modifyOnClick (root) {
       root.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A' && typeof e.target.href === 'string') {
-          return onClick(e);
+        let found = jQuery(e.target).closest('a')[0];
+        if (found && typeof found.href === 'string') {
+          return onClick(e, found);
         }
       }, false);
     };
