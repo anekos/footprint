@@ -38,8 +38,14 @@
           </div>
           <div class="col">
             <button id="add-bookmark" class="btn btn-primary btn-block">Bookmark</button>
-            <input id="new-tag-name" type="text" class="form-control" placeholder="New tag name">
-            <button type="button" id="new-tag-button" class="btn btn-secondary btn-block">Add new tag</div>
+            <input type="text"
+                   class="form-control"
+                   placeholder="New tag name"
+                   v-model.lazy.trim="newTagName">
+            <button type="button"
+                    id="new-tag-button"
+                    class="btn btn-secondary btn-block"
+                    @click="addNewTag">Add new tag</div>
           </div>
         </div>
       </div>

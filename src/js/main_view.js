@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Bootstrap from 'bootstrap'
 import Footprint from './footprint.js'
 import Util from './util.js'
-import UI from './ui_common.js'
 
 
 async function main() {
@@ -18,6 +17,7 @@ async function main() {
         {name: 'NONE', isIn: tags => tags.length == 0},
         {name: 'ALL', isIn: _ => true},
       ],
+      newTagName: '',
     },
     computed: {
       tags: function () {
@@ -41,24 +41,15 @@ async function main() {
           return;
         await Footprint.removeTarget(target.url);
         app.targets.splice(targetIndex, 1);
+      },
+      addNewTag: function () {
+        if (this.realTags.includes(this.newTagName) || !this.newTagName.length)
+          return;
+        this.realTags.push(this.newTagName);
+        this.newTagName = '';
       }
     }),
   });
-
-  document.querySelector('#new-tag-button').addEventListener(
-    'click',
-    () => {
-      let element = document.querySelector('#new-tag-name');
-      if (element) {
-        let name = element.value.trim();
-        if (name.length) {
-          app.realTags.push(name);
-          element.value = '';
-        }
-      }
-    });
-
-  UI.setupNewTagButton(app);
 }
 
 
