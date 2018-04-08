@@ -11,6 +11,12 @@
       li:hover > .remove-page-button {
         display: inline;
       }
+      .remove-target-button {
+        display: none;
+      }
+      span:hover > .remove-target-button {
+        display: inline;
+      }
     </style>
     <title>Footprint</title>
   </head>
@@ -45,42 +51,51 @@
               <div v-for="(target, index) in targets"
                    v-if="tag.isIn(target.tags)">
                 <div class="card">
-                  <a data-toggle="collapse"
-                     class="card-header"
-                     role="button"
-                     aria-expanded="false"
-                     :href="id('#target',tagIndex, index)"
-                     :aria-controls="id('target', tagIndex, index)">
+                  <span class="card-header"
+                        data-toggle="collapse"
+                        role="button"
+                        aria-expanded="false"
+                        :href="id('#target',tagIndex, index)"
+                        :aria-controls="id('target', tagIndex, index)">
                     {{ target.title }}
-                  </a>
+                  </span>
                   <div class="collapse card-body"
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
-                    <ol reversed>
-                      <li v-for="(page, pageIndex) in target.pages.slice().reverse()">
-                        <a :href="page.url">{{ page.title }}</a>
+                    <div class="row">
+                      <div class="col-xl-11">
+                        <ol reversed>
+                          <li v-for="(page, pageIndex) in target.pages.slice().reverse()">
+                            <a :href="page.url">{{ page.title }}</a>
+                            <button href="#"
+                                    class="btn btn-sm btn-danger remove-page-button"
+                                    v-on:click="removePage(target, page, target.pages.length - pageIndex - 1)"
+                                    v-if="target.pages.length > 1">❌</button>
+                          </li>
+                        </ol>
+                        <div class="custom-control custom-checkbox custom-control-inline"
+                             v-for="(tag, tagIndex) in tags"
+                             v-if="tag.real">
+                          <input type="checkbox"
+                                 class="custom-control-input tag-check"
+                                 v-model="target.tags"
+                                 :id="id('tag', index, tagIndex)"
+                                 :value="tag.name"
+                                 v-on:click="$set(target, 'tagsUpdated', true)">
+                          <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
+                        </div>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                :class="id('update-tag-button', index)"
+                                :disabled="!target.tagsUpdated"
+                                v-on:click="updateTags(target)">Update</button>
+                      </div>
+                      <div class="col-xl-1">
                         <button href="#"
-                                class="btn btn-sm btn-danger remove-page-button"
-                           v-on:click="removePage(target, page, target.pages.length - pageIndex - 1)"
-                           v-if="target.pages.length > 1">❌</button>
-                      </li>
-                    </ol>
-                    <div class="custom-control custom-checkbox custom-control-inline"
-                         v-for="(tag, tagIndex) in tags"
-                         v-if="tag.real">
-                      <input type="checkbox"
-                             class="custom-control-input tag-check"
-                             v-model="target.tags"
-                             :id="id('tag', index, tagIndex)"
-                             :value="tag.name"
-                             v-on:click="$set(target, 'tagsUpdated', true)">
-                      <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
+                                class="btn btn-sm btn-danger"
+                                v-on:click="removeTarget(target, index)">Unbookmark</button>
+                      </div>
                     </div>
-                    <button type="button"
-                            class="btn btn-secondary"
-                            :class="id('update-tag-button', index)"
-                            :disabled="!target.tagsUpdated"
-                            v-on:click="updateTags(target)">Update</button>
                   </div>
                 </div>
               </div>

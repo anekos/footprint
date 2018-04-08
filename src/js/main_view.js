@@ -35,7 +35,12 @@ async function main() {
           return;
         await Footprint.removePage(page.url);
         target.pages.splice(pageIndex, 1);
-        console.info(target.pages.length);
+      },
+      removeTarget: async function (target, targetIndex) {
+        if (!confirm('Delete this bookmark? (' + target.title + ')'))
+          return;
+        await Footprint.removeTarget(target.url);
+        app.targets.splice(targetIndex, 1);
       }
     }),
   });

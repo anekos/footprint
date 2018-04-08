@@ -131,7 +131,7 @@ export default (function () {
       let pages = value.targets[targetUrl].pages;
       delete value.targets[targetUrl];
       for (let page of pages) {
-        await Footprint.removePage(page);
+        await Footprint.removePage(page.url);
       }
       return browser.storage.local.set(value);
     },
