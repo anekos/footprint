@@ -29,7 +29,7 @@
 
       <div class="row">
 
-        <div class="col-xl-10 col-md-11 col-xs-11">
+        <div class="col-xl-10 col-xs-11">
 
           <ul class="nav nav-tabs">
             <li class="nav-item"
@@ -63,16 +63,29 @@
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
                     <div class="row">
-                      <div class="col-xl-11">
-                        <ol reversed>
-                          <li v-for="(page, pageIndex) in target.pages.slice().reverse()">
-                            <a :href="page.url">{{ page.title }}</a>
-                            <button href="#"
-                                    class="btn btn-sm btn-danger remove-page-button"
+                      <div class="col-md-11">
+                        <ul reversed class="list-group">
+                          <li class="list-group-item"
+                              v-for="(page, pageIndex) in target.pages.slice().reverse()">
+                            <a :href="page.url">{{ target.pages.length - pageIndex }}. {{ page.title }}</a>
+                            <button type="button"
+                                    class="close"
+                                    aria-label="Remove thie page"
                                     v-on:click="removePage(target, page, target.pages.length - pageIndex - 1)"
-                                    v-if="target.pages.length > 1">❌</button>
+                                    v-if="target.pages.length > 1">
+                              　<span aria-hidden="true">&times;</span>
+                            </button>
                           </li>
-                        </ol>
+                        </ul>
+                      </div>
+                      <div class="col-md-1">
+                        <button href="#"
+                                class="btn btn-sm btn-danger"
+                                v-on:click="removeTarget(target, index)">Unbookmark</button>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-12">
                         <div class="custom-control custom-checkbox custom-control-inline"
                              v-for="(tag, tagIndex) in tags"
                              v-if="tag.real">
@@ -90,11 +103,6 @@
                                 :disabled="!target.tagsUpdated"
                                 v-on:click="updateTags(target)">Update</button>
                       </div>
-                      <div class="col-xl-1">
-                        <button href="#"
-                                class="btn btn-sm btn-danger"
-                                v-on:click="removeTarget(target, index)">Unbookmark</button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -104,7 +112,7 @@
 
         </div>
 
-        <div class="col-xl-2 col-md-1 col-xs-1">
+        <div class="col-xl-2 col-xs-1">
           <input id="new-tag-name" type="text" class="form-control" placeholder="New tag name">
           <button type="button" id="new-tag-button" class="btn btn-secondary btn-block">New tag</button>
         </div>
