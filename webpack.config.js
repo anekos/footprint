@@ -28,7 +28,7 @@ const app = {
       {from: 'node_modules/bootstrap/dist/css/bootstrap.css.map', to: 'css'},
     ], {}),
     new ZipPlugin({
-      filename: 'footprint.zip'
+      filename: '../footprint.zip'
     }),
   ],
   resolve: {
