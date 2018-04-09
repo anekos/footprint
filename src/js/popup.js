@@ -49,8 +49,10 @@ async function main() {
         });
       },
       showBookmarks: () => {
-        let win = window.open('/html/main_view.html', '_blank');
-        win.focus();
+        chrome.tabs.create({
+          url: chrome.extension.getURL('html/main_view.html'),
+          active: true,
+        });
         window.close();
       }
     }
