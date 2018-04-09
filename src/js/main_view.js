@@ -18,6 +18,7 @@ async function main() {
         {name: 'ALL', isIn: _ => true},
       ],
       newTagName: '',
+      tagNameToRemove: [],
     },
     computed: {
       tags: function () {
@@ -47,6 +48,13 @@ async function main() {
           return;
         this.realTags.push(this.newTagName);
         this.newTagName = '';
+      },
+      removeTags: async function () {
+        await Footprint.removeTags(this.tagNameToRemove);
+        let targets = await Footprint.targets();
+        this.targets = targets;
+        this.realTags = Footprint.Helper.extractTags(targets);
+        this.tagNameToRemove = [];
       }
     }),
   });

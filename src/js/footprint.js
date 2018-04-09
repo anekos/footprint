@@ -126,6 +126,15 @@ export default (function () {
       }
     },
 
+    removeTags: async (tags) => {
+      let value = await browser.storage.local.get({targets: {}});
+      for (let key in value.targets) {
+        let target = value.targets[key];
+        target.tags = target.tags.filter(tag => !tags.includes(tag));
+      }
+      return browser.storage.local.set(value);
+    },
+
     removeTarget: async (targetUrl) => {
       let value = await browser.storage.local.get({targets: {}});
       let pages = value.targets[targetUrl].pages;
