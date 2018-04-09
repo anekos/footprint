@@ -19,6 +19,7 @@ async function main() {
       ],
       newTagName: '',
       tagNameToRemove: [],
+      fileToImport: null,
     },
     computed: {
       tags: function () {
@@ -55,9 +56,27 @@ async function main() {
         this.targets = targets;
         this.realTags = Footprint.Helper.extractTags(targets);
         this.tagNameToRemove = [];
-      }
+      },
+      selectFileToImport: async function (e) {
+        let files = e.target.files;
+        this.fileToImport = files[0];
+      },
+      importBookmarks: async function () {
+        let reader = new FileReader();
+        reader.onload = async () => {
+          await Footprint.importJson(reader.result);
+          document.location.href = document.location.href;
+        };
+        reader.readAsText(this.fileToImport);
+        this.fileToImport = null;
+      },
+      exportBookmarks: async () => {
+        var text = await Footprint.exportJson();
+        window.open('data:application/json,' + encodeURIComponent(text));
+      },
     }),
   });
+
 }
 
 
