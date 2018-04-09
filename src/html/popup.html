@@ -22,7 +22,7 @@
     <div id="app" class="container">
 
       <div class="row card-body">
-        <div id="open" class="col btn btn-primary">Show bookmarks</div>
+        <div id="open" class="col btn btn-primary" @click="showBookmarks">Show bookmarks</div>
       </div>
 
       <div class="card">
@@ -41,7 +41,9 @@
             </div>
           </div>
           <div class="col">
-            <button id="add-bookmark" class="btn btn-primary btn-block">Bookmark</button>
+            <button id="add-bookmark"
+                    class="btn btn-primary btn-block"
+                    @click="addBookmark">Bookmark</button>
             <input type="text"
                    class="form-control"
                    placeholder="New tag name"
