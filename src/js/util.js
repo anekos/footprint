@@ -1,4 +1,6 @@
 
+import strictArrayEquals from 'strict-array-equals'
+
 
 export default (function () {
   function getTime() {
@@ -22,6 +24,7 @@ export default (function () {
     Methods: (original) => {
       return Object.assign({}, original || {}, {
         id: Util.id,
+        arrayEq: strictArrayEquals,
       });
     }
   };

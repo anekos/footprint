@@ -35,7 +35,6 @@ async function main() {
       updateTags: async function (target) {
         target.tags = [].concat(target.newTags);
         await Footprint.updateTags(target.url, target.tags);
-        app.$set(target, 'tagsUpdated', false);
       },
       removePage: async function (target, page, pageIndex) {
         if (!confirm('Remove this page? (' + page.title + ')'))
