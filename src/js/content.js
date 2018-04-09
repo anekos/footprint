@@ -36,8 +36,8 @@ async function main () {
       return;
     }
 
-    let url = document.location.href;
-    let value = await Footprint.getPage(url);
+    let pageUrl = document.location.href;
+    let value = await Footprint.getPage(pageUrl);
 
     if (!(value && value.targetUrl))
       return Promise.reject('No page data');
@@ -52,7 +52,7 @@ async function main () {
 
     modifyOnClick(document.querySelector('body'));
 
-    return Footprint.updateTitle(url, document.title);
+    return Footprint.updateTitle(targetUrl, pageUrl, document.title);
   }
 
   install();

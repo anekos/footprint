@@ -107,12 +107,23 @@ export default (function () {
       }
     },
 
-    updateTitle: async function (pageUrl, title) {
-      let key = Footprint.Name.Page(pageUrl);
-      let value = await browser.storage.local.get(key)
-      let page = value[key];
-      page.title = title;
-      return browser.storage.local.set(value)
+    updateTitle: async function (targetUrl, pageUrl, pageTitle) {
+      let value = await browser.storage.local.get({targets: {}});
+
+      let target = value.targets[targetUrl];
+      if (!target)
+        return;
+
+      let updated = true;
+      target.pages.forEach(page => {
+        if (page.url == pageUrl && page.title != pageTitle) {
+          page.title = pageTitle;
+          updated = true;
+        }
+      });
+
+      if (updated)
+        return browser.storage.local.set(value);
     },
 
     refreshTarget: async function (targetUrl, property) {
