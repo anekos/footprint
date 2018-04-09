@@ -115,7 +115,7 @@
                              v-if="tag.real">
                           <input type="checkbox"
                                  class="custom-control-input tag-check"
-                                 v-model="target.tags"
+                                 v-model="target.newTags"
                                  :id="id('tag', index, tagIndex)"
                                  :value="tag.name"
                                  v-on:click="$set(target, 'tagsUpdated', true)">

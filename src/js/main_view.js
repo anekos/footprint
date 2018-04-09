@@ -8,6 +8,10 @@ import Util from './util.js'
 async function main() {
   let targets = await Footprint.targets();
 
+  targets.forEach(target => {
+    target.newTags = [].concat(target.tags);
+  });
+
   let app = new Vue({
     el: '#app',
     data: {
@@ -29,6 +33,7 @@ async function main() {
     },
     methods: Util.Methods({
       updateTags: async function (target) {
+        target.tags = [].concat(target.newTags);
         await Footprint.updateTags(target.url, target.tags);
         app.$set(target, 'tagsUpdated', false);
       },
