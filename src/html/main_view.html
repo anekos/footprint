@@ -87,10 +87,10 @@
                         @click="updateLocationHash('target', index)">
                     {{ target.title }}
                   </span>
-                  <div class="collapse card-body"
+                  <div class="collapse"
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
-                    <div class="row">
+                    <div class="row mt-3 mx-1">
                       <div class="col-md-11">
                         <ul reversed class="list-group">
                           <li class="list-group-item"
@@ -114,7 +114,7 @@
                         <div v-if="target.lastUpdatedAt" class="mt-2">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</div>
                       </div>
                     </div>
-                    <div class="row mt-2">
+                    <div class="row m-3">
                       <div class="col-12">
                         <div class="custom-control custom-checkbox custom-control-inline"
                              v-for="(tag, tagIndex) in realTags"
