@@ -58,7 +58,8 @@
 
           <ul class="nav nav-tabs">
             <li class="nav-item"
-                v-for="(tag, index) in tags">
+                v-for="(tag, index) in tags"
+                :key="tag.name">
               <a class="nav-link"
                  data-toggle="tab"
                  :class="{active: index == 0}"
@@ -71,6 +72,7 @@
           <div class="tab-content">
             <div v-for="(tag, tagIndex) in tags"
                  class="tab-pane"
+                 :key="tag.name"
                  :id="id('tab', tagIndex)"
                  :class="{active: tagIndex == 0}">
               <div v-for="(target, index) in targets"
@@ -91,7 +93,8 @@
                       <div class="col-md-11">
                         <ul reversed class="list-group">
                           <li class="list-group-item"
-                              v-for="(page, pageIndex) in target.pages.slice().reverse()">
+                              v-for="(page, pageIndex) in target.pages.slice().reverse()"
+                              :key="page.url">
                             <a :href="page.url">{{ target.pages.length - pageIndex }}. {{ page.title }}</a>
                             <button type="button"
                                     class="close"
@@ -113,14 +116,14 @@
                     <div class="row mt-2">
                       <div class="col-12">
                         <div class="custom-control custom-checkbox custom-control-inline"
-                             v-for="(tag, tagIndex) in tags"
-                             v-if="tag.real">
+                             v-for="(tag, tagIndex) in realTags"
+                             :key="tag">
                           <input type="checkbox"
                                  class="custom-control-input tag-check"
                                  v-model="target.newTags"
                                  :id="id('tag', index, tagIndex)"
-                                 :value="tag.name">
-                          <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
+                                 :value="tag">
+                          <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag }}</label>
                         </div>
                         <button type="button"
                                 class="btn btn-secondary"
@@ -182,7 +185,7 @@
               <label>Remove tags from all bookmarks</label>
               <div class="form-group">
                 <select multiple class="form-control" v-model="tagNameToRemove">
-                  <option v-for="tag in realTags">{{ tag }}</option>
+                  <option v-for="tag in realTags" :key="tag">{{ tag }}</option>
                 </select>
               </div>
             </div>
