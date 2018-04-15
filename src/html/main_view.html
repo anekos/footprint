@@ -62,8 +62,9 @@
                 :key="tag.name">
               <a class="nav-link"
                  data-toggle="tab"
-                 :class="{active: index == 0}"
-                 :href="id('#tab', index) ">
+                 :id="id('tab-link', index)"
+                 :href="id('#tab', index)"
+                 @click="updateLocationHash('tag', index)">
                 {{ tag.name }}
               </a>
             </li>
@@ -73,8 +74,7 @@
             <div v-for="(tag, tagIndex) in tags"
                  class="tab-pane"
                  :key="tag.name"
-                 :id="id('tab', tagIndex)"
-                 :class="{active: tagIndex == 0}">
+                 :id="id('tab', tagIndex)">
               <div v-for="(target, index) in targets"
                    v-if="tag.isIn(target.tags)">
                 <div class="card">
@@ -83,7 +83,8 @@
                         role="button"
                         aria-expanded="false"
                         :href="id('#target',tagIndex, index)"
-                        :aria-controls="id('target', tagIndex, index)">
+                        :aria-controls="id('target', tagIndex, index)"
+                        @click="updateLocationHash('target', index)">
                     {{ target.title }}
                   </span>
                   <div class="collapse card-body"
