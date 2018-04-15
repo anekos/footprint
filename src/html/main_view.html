@@ -22,11 +22,11 @@
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#"><h1><span :class="{ konami: konami }">🐾</span> Footprint <span :class="{ konami: konami }">🐾</span></h1></a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="ナビゲーションの切替">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="Navber">
+        <div class="collapse navbar-collapse" id="navbar">
           <ul class="navbar-nav mr-auto">
             <!--
             <li class="nav-item active">
@@ -43,6 +43,7 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" data-toggle="modal" data-target="#new-tag-modal">New tag</a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#remove-tags-modal">Remove tags</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#order-tags-modal">Order tags</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" data-target="#import-modal">Import</a>
                 <a class="dropdown-item" data-toggle="modal" @click="exportBookmarks">Export</a>
@@ -63,11 +64,13 @@
 
           <ul class="nav nav-tabs">
             <li class="nav-item"
-                v-for="(tag, index) in tags">
+                v-for="(tag, index) in tags"
+                :key="tag.name">
               <a class="nav-link"
                  data-toggle="tab"
-                 :class="{active: index == 0}"
-                 :href="id('#tab', index) ">
+                 :id="id('tab-link', index)"
+                 :href="id('#tab', index)"
+                 @click="updateLocationHash('tag', index)">
                 {{ tag.name }}
               </a>
             </li>
@@ -76,8 +79,8 @@
           <div class="tab-content">
             <div v-for="(tag, tagIndex) in tags"
                  class="tab-pane"
-                 :id="id('tab', tagIndex)"
-                 :class="{active: tagIndex == 0}">
+                 :key="tag.name"
+                 :id="id('tab', tagIndex)">
               <div v-for="(target, index) in targets"
                    v-if="tag.isIn(target.tags)">
                 <div class="card">
@@ -86,21 +89,23 @@
                         role="button"
                         aria-expanded="false"
                         :href="id('#target',tagIndex, index)"
-                        :aria-controls="id('target', tagIndex, index)">
+                        :aria-controls="id('target', tagIndex, index)"
+                        @click="updateLocationHash('target', index)">
                     {{ target.title }}
                   </span>
-                  <div class="collapse card-body"
+                  <div class="collapse"
                        :data-parent="id('#tab', tagIndex)"
                        :id="id('target', tagIndex, index)">
-                    <div class="row">
+                    <div class="row mt-3 mx-1">
                       <div class="col-md-11">
                         <ul reversed class="list-group">
                           <li class="list-group-item"
-                              v-for="(page, pageIndex) in target.pages.slice().reverse()">
+                              v-for="(page, pageIndex) in target.pages.slice().reverse()"
+                              :key="page.url">
                             <a :href="page.url">{{ target.pages.length - pageIndex }}. {{ page.title }}</a>
                             <button type="button"
                                     class="close"
-                                    aria-label="Remove thie page"
+                                    aria-label="Remove this page"
                                     v-on:click="removePage(target, page, target.pages.length - pageIndex - 1)"
                                     v-if="target.pages.length > 1">
                               　<span aria-hidden="true">&times;</span>
@@ -112,20 +117,20 @@
                         <button href="#"
                                 class="btn btn-sm btn-danger"
                                 v-on:click="removeTarget(target, index)">Unbookmark</button>
-                        <div v-if="target.lastUpdatedAt" class="mt-2">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</div>
+                        <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                     </div>
-                    <div class="row mt-2">
+                    <div class="row m-3">
                       <div class="col-12">
                         <div class="custom-control custom-checkbox custom-control-inline"
-                             v-for="(tag, tagIndex) in tags"
-                             v-if="tag.real">
+                             v-for="(tag, tagIndex) in realTags"
+                             :key="tag">
                           <input type="checkbox"
                                  class="custom-control-input tag-check"
                                  v-model="target.newTags"
                                  :id="id('tag', index, tagIndex)"
-                                 :value="tag.name">
-                          <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag.name }}</label>
+                                 :value="tag">
+                          <label class="custom-control-label" :for="id('tag', index, tagIndex)">{{ tag }}</label>
                         </div>
                         <button type="button"
                                 class="btn btn-secondary"
@@ -143,6 +148,7 @@
         </div>
       </div>
 
+      <!-- NEW TAG -->
 
       <div class="modal fade" id="new-tag-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -171,6 +177,7 @@
         </div>
       </div>
 
+      <!-- REMOVE TAG -->
 
       <div class="modal fade" id="remove-tags-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -185,7 +192,7 @@
               <label>Remove tags from all bookmarks</label>
               <div class="form-group">
                 <select multiple class="form-control" v-model="tagNameToRemove">
-                  <option v-for="tag in realTags">{{ tag }}</option>
+                  <option v-for="tag in realTags" :key="tag">{{ tag }}</option>
                 </select>
               </div>
             </div>
@@ -200,6 +207,41 @@
         </div>
       </div>
 
+      <!-- ORDER TAGS -->
+
+      <div class="modal fade" id="order-tags-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Order tags</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <label>Drag &amp; drop to order</label>
+              <div class="form-group">
+                <ol class="list-group">
+                  <draggable v-model="realTags" @end="updateTagOrder">
+                    <li class="list-group-item"
+                        v-for="tag in realTags"
+                        :key="tag">
+                      {{ tag }}
+                    </li>
+                  </draggable>
+                </ol>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button"
+                      class="btn btn-primary"
+                      data-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPORT -->
 
       <div class="modal fade" id="import-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">

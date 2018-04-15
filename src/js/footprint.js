@@ -195,11 +195,26 @@ export default (function () {
       }
     },
 
+    getConfig: async () => {
+      let value = await browser.storage.local.get({config: {}});
+      return value.config;
+    },
+
+    updateConfig: async (config) => {
+      await browser.storage.local.set({config});
+    },
+
     Helper: {
-      extractTags: (targets) => {
+      extractTags: (targets, order) => {
         let tags = {};
+        let _order = {};
+        if (order) {
+          order.forEach((tag, index) => _order[tag] = index);
+        }
         targets.forEach((target) => target.tags && target.tags.forEach((tag) => tags[tag] = true));
-        return Object.keys(tags).sort();
+        tags = Object.keys(tags).sort();
+        tags.sort((a, b) => _order[a] - _order[b]);
+        return tags;
       },
     },
   };
