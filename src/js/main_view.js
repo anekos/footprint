@@ -4,9 +4,12 @@ import Bootstrap from 'bootstrap'
 import Footprint from './footprint.js'
 import Util from './util.js'
 
+import draggable from 'vuedraggable'
+
 
 async function main() {
   let targets = await Footprint.targets();
+  let config = await Footprint.getConfig();
 
   targets.forEach(target => {
     target.newTags = [].concat(target.tags);
@@ -15,9 +18,12 @@ async function main() {
 
   let app = new Vue({
     el: '#app',
+    components: {
+      draggable,
+    },
     data: {
       targets: targets,
-      realTags: Footprint.Helper.extractTags(targets),
+      realTags: Footprint.Helper.extractTags(targets, config.tagOrder),
       pseudoTags: [
         {name: 'NONE', isIn: tags => tags.length == 0},
         {name: 'ALL', isIn: _ => true},
@@ -79,6 +85,10 @@ async function main() {
         var text = await Footprint.exportJson();
         window.open('data:application/json,' + encodeURIComponent(text));
       },
+      updateTagOrder: async function () {
+        config.tagOrder = this.realTags.concat([]);
+        await Footprint.updateConfig(config);
+      }
     }),
   });
 
