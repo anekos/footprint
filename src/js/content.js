@@ -8,17 +8,17 @@ async function main () {
     async function onClick (e, element) {
       Footprint.debug('newPage/target', targetUrl);
 
-      e.preventDefault();
-      e.stopPropagation();
+      let pageTitle = element.textContent.trim();
+      let pageUrl = element.href;
 
-      let title = element.textContent.trim();
-      let url = element.href;
+      if (!pageUrl.trim())
+        return;
 
       let target = await Footprint.getTarget(targetUrl);
-      if (await Footprint.newPage(targetUrl)(url, title)) {
-        await Footprint.notify('New page for ' + target.title);
+      let nextPage = target.pages.length + 1;
+      if (await Footprint.newPage(targetUrl)(pageUrl, pageTitle)) {
+        await Footprint.notify('New page (' + nextPage + ') for ' + target.title);
       }
-      document.location.href = url;
     };
 
     return function modifyOnClick (root) {
