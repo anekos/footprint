@@ -1,8 +1,9 @@
 
 import Vue from 'vue'
 import Bootstrap from 'bootstrap'
-import Konami from 'konami'
 import JQuery from 'jquery'
+import Konami from 'konami'
+
 import Footprint from './footprint.js'
 import Util from './util.js'
 
@@ -46,8 +47,8 @@ async function main() {
       newTagName: '',
       tagNameToRemove: [],
       fileToImport: null,
-      konami: false,
       state,
+      konami: false,
     },
     computed: {
       tags: function () {
@@ -110,11 +111,14 @@ async function main() {
         this.state[name] = value;
         let hash = [this.state.tag, this.state.target];
         window.location.hash = hash.join('-');
+      },
+      shortenUrl: function (url) {
+        let parsed = new URL(url);
+        console.info(parsed);
+        return url;
       }
     }),
   });
-
-  new Konami(() => { app.konami = true });
 
   JQuery(Util.id('#tab', state.tag)).addClass('active');
   JQuery(Util.id('#tab-link', state.tag)).addClass('active');
@@ -122,6 +126,7 @@ async function main() {
     JQuery(Util.id('#target', state.tag, state.target)).addClass('show');
   }
 
+  new Konami(() => { app.konami = true });
 }
 
 
