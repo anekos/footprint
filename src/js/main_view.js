@@ -15,10 +15,12 @@ async function main() {
   let config = await Footprint.getConfig();
   let realTags = Footprint.Helper.extractTags(targets, config.tagOrder);
 
+
   targets.forEach(target => {
     target.newTags = [].concat(target.tags);
   });
   targets.sort((a, b) => b.lastUpdatedAt - a.lastUpdatedAt);
+
 
   let state = (() => {
     let values = window.location.hash.replace(/^#/, '').split('-');
@@ -129,11 +131,14 @@ async function main() {
     }),
   });
 
+
   JQuery(Util.id('#tab', state.tag)).addClass('active');
   JQuery(Util.id('#tab-link', state.tag)).addClass('active');
   if (typeof state.target !== 'undefined') {
     JQuery(Util.id('#target', state.tag, state.target)).addClass('show');
   }
+
+  window.jQuery = JQuery;
 
   new Konami(() => { app.konami = true });
 }

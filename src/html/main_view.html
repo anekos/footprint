@@ -66,13 +66,17 @@
             <li class="nav-item"
                 v-for="(tag, index) in tags"
                 :key="tag.name">
-              <a class="nav-link"
-                 data-toggle="tab"
-                 :id="id('tab-link', index)"
-                 :href="id('#tab', index)"
-                 @click="updateLocationHash('tag', index)">
-                {{ tag.name }}
-              </a>
+              <span class="nav-link"
+                    data-toggle="tab"
+                    data-placement="top"
+                    :id="id('tab-link', index)"
+                    :href="id('#tab', index)"
+                    @click="updateLocationHash('tag', index)">
+                <a data-toggle="tooltip"
+                   :title="targets.filter(target => tag.isIn(target.tags)).length + ' targets'">
+                  {{ tag.name }}
+                </a>
+              </span>
             </li>
           </ul>
 
