@@ -91,7 +91,7 @@
                         :href="id('#target',tagIndex, index)"
                         :aria-controls="id('target', tagIndex, index)"
                         @click="updateLocationHash('target', index)">
-                    {{ target.title }}
+                    {{ target.title.trim() || target.url }}
                   </span>
                   <div class="collapse"
                        :data-parent="id('#tab', tagIndex)"
@@ -102,7 +102,7 @@
                           <li class="list-group-item"
                               v-for="(page, pageIndex) in target.pages.slice().reverse()"
                               :key="page.url">
-                            <a :href="page.url">{{ target.pages.length - pageIndex }}. {{ page.title }}</a>
+                            <a :href="page.url">{{ target.pages.length - pageIndex }}. {{ page.title.trim() || shortenUrl(page.url) }}</a>
                             <button type="button"
                                     class="close"
                                     aria-label="Remove this page"

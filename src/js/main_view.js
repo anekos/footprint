@@ -113,9 +113,14 @@ async function main() {
         window.location.hash = hash.join('-');
       },
       shortenUrl: function (url) {
-        let parsed = new URL(url);
-        console.info(parsed);
-        return url;
+        try {
+          let _url = new URL(url);
+          if (_url.pathname.length <= 1)
+            return _url.host;
+          return _url.host + '/../' + _url.pathname.replace(/.*?\//g, '');
+        } catch (e) {
+          return 'Invalid URL: <' + url + '>';
+        }
       }
     }),
   });
