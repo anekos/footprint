@@ -1,5 +1,6 @@
 
 import strictArrayEquals from 'strict-array-equals'
+import DateFormat from 'dateformat'
 
 
 export default (function () {
@@ -25,6 +26,7 @@ export default (function () {
       return Object.assign({}, original || {}, {
         id: Util.id,
         arrayEq: strictArrayEquals,
+        dateFormat: DateFormat,
       });
     }
   };

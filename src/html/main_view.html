@@ -106,6 +106,7 @@
                         <button href="#"
                                 class="btn btn-sm btn-danger"
                                 v-on:click="removeTarget(target, index)">Unbookmark</button>
+                        <div v-if="target.lastUpdatedAt" class="mt-2">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</div>
                       </div>
                     </div>
                     <div class="row mt-2">

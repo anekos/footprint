@@ -11,6 +11,7 @@ async function main() {
   targets.forEach(target => {
     target.newTags = [].concat(target.tags);
   });
+  targets.sort((a, b) => b.lastUpdatedAt - a.lastUpdatedAt);
 
   let app = new Vue({
     el: '#app',
