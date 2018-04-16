@@ -26,6 +26,9 @@ export default (function () {
       return Object.assign({}, Util, original || {}, {
         arrayEq: strictArrayEquals,
         dateFormat: DateFormat,
+        removeTags: (html) => {
+          return html && html.replace(/<.+?>/g, '');
+        }
       });
     }
   };
