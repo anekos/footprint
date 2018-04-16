@@ -72,8 +72,7 @@
                     :id="id('tab-link', index)"
                     :href="id('#tab', index)"
                     @click="updateLocationHash('tag', index)">
-                <a data-toggle="tooltip"
-                   :title="targets.filter(target => tag.isIn(target.tags)).length + ' targets'">
+                <a :title="'Targets: ' + targets.filter(target => tag.isIn(target.tags)).length">
                   {{ tag.name }}
                 </a>
               </span>
@@ -95,7 +94,9 @@
                         :href="id('#target',tagIndex, index)"
                         :aria-controls="id('target', tagIndex, index)"
                         @click="updateLocationHash('target', index)">
-                    {{ removeTags(target.title.trim()) || target.url }}
+                    <span :title="'Pages: ' + target.pages.length + '\nTags: ' + target.tags.join(', ')">
+                      {{ removeTags(target.title.trim()) || target.url }}
+                    </span>
                   </span>
                   <div class="collapse"
                        :data-parent="id('#tab', tagIndex)"
