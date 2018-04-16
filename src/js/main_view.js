@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import Bootstrap from 'bootstrap'
+import Konami from 'konami'
 import Footprint from './footprint.js'
 import Util from './util.js'
 
@@ -25,6 +26,7 @@ async function main() {
       newTagName: '',
       tagNameToRemove: [],
       fileToImport: null,
+      konami: false,
     },
     computed: {
       tags: function () {
@@ -82,6 +84,7 @@ async function main() {
     }),
   });
 
+  new Konami(() => { app.konami = true });
 }
 
 

@@ -9,13 +9,19 @@
       [v-cloak] {
         display: none;
       }
+      @keyframes blink {
+        75% { opacity: 0.0; }
+      }
+      .konami {
+        animation: blink 1s step-end infinite;
+      }
     </style>
   </head>
   <body>
     <div id="app" class="container-fluid" v-cloak>
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">🐾 Footprint 🐾</a>
+        <a class="navbar-brand" href="#"><h1><span :class="{ konami: konami }">🐾</span> Footprint <span :class="{ konami: konami }">🐾</span></h1></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -52,7 +58,7 @@
         </div>
       </nav>
 
-      <div class="row">
+      <div class="row mt-2">
         <div class="col-xs-12 col-sm-12">
 
           <ul class="nav nav-tabs">
