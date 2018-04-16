@@ -4,13 +4,13 @@ include .env
 
 .PHONY: dist
 
-build: dist sign
+release: build sign
 	(cd dist ; zip -r ../footprint.zip .)
 
 sign:
 	web-ext sign --source-dir dist
 
-dist:
+build:
 	npm run build
 
 watch:
