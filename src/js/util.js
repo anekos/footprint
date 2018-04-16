@@ -23,8 +23,7 @@ export default (function () {
     },
 
     Methods: (original) => {
-      return Object.assign({}, original || {}, {
-        id: Util.id,
+      return Object.assign({}, Util, original || {}, {
         arrayEq: strictArrayEquals,
         dateFormat: DateFormat,
       });

@@ -57,6 +57,9 @@ async function main() {
       }
     },
     methods: Util.Methods({
+      focus: (selector) => {
+        return JQuery(selector).focus();
+      },
       updateTags: async function (target) {
         target.tags = [].concat(target.newTags);
         await Footprint.updateTags(target.url, target.tags);
@@ -78,6 +81,7 @@ async function main() {
           return;
         this.realTags.push(this.newTagName);
         this.newTagName = '';
+        setTimeout(() => JQuery('#new-tag-name').focus(), 0);
       },
       removeTags: async function () {
         await Footprint.removeTags(this.tagNameToRemove);
