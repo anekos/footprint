@@ -15,6 +15,22 @@ const app = {
     path: `${__dirname}/dist/`,
     filename: 'js/[name].js'
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'css',
+            }
+          }
+        ]
+      }
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
@@ -22,8 +38,6 @@ const app = {
       {from: 'src/html/popup.html', to: 'html'},
       {from: 'src/icon/64.png', to: 'icon'},
       {from: 'src/meta/manifest.json'},
-      {from: 'node_modules/bootstrap/dist/css/bootstrap.css', to: 'css'},
-      {from: 'node_modules/bootstrap/dist/css/bootstrap.css.map', to: 'css'},
     ], {}),
     new ZipPlugin({
       filename: '../footprint.zip'

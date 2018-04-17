@@ -9,6 +9,9 @@ import Util from './util.js'
 
 import draggable from 'vuedraggable'
 
+import 'file-loader!bootstrap/dist/css/bootstrap.min.css'
+
+
 
 async function main() {
   let targets = await Footprint.targets();
