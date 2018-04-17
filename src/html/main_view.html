@@ -126,7 +126,7 @@
                     :id="id('tab-link', index)"
                     :href="id('#tab', index)"
                     @click="updateLocationHash('tag', index)">
-                <a :title="'Targets: ' + targets.filter(target => tag.isIn(target.tags)).length">
+                <a :title="'Targets: ' + filteredTargets.filter(target => tag.isIn(target.tags)).length">
                   {{ tag.name }}
                 </a>
               </span>
