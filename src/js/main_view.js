@@ -71,6 +71,10 @@ async function main() {
         return this.targets.filter(target => {
           if (filter.test(target.title))
             return true;
+          for (let page of target.pages) {
+            if (filter.test(page.title))
+              return true;
+          }
           return false;
         });
       }
