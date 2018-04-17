@@ -3,17 +3,65 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="/icon/64.png">
-    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <title>Footprint</title>
     <style>
       [v-cloak] {
         display: none;
       }
+
       @keyframes blink {
         75% { opacity: 0.0; }
       }
+
       .konami {
         animation: blink 1s step-end infinite;
+      }
+
+      /* http://google.github.io/material-design-icons/#what-are-material-icons- */
+
+      @font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Material Icons'), local('MaterialIcons-Regular'), url(../font/MaterialIcons-Regular.woff2) format('woff2');
+      }
+
+      .material-icons {
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;  /* Preferred icon size */
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+
+        /* Support for all WebKit browsers. */
+        -webkit-font-smoothing: antialiased;
+        /* Support for Safari and Chrome. */
+        text-rendering: optimizeLegibility;
+
+        /* Support for Firefox. */
+        -moz-osx-font-smoothing: grayscale;
+
+        /* Support for IE. */
+        font-feature-settings: 'liga';
+      }
+
+      #filter-clear {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        bottom: 0;
+        height: 14px;
+        margin: auto;
+        font-size: 14px;
+        cursor: pointer;
+        color: #ccc;
       }
     </style>
   </head>
@@ -50,12 +98,18 @@
               </div>
             </li>
           </ul>
-          <!--
           <form class="form-inline my-2 my-lg-0">
-            <input type="search" class="form-control mr-sm-2" placeholder="検索..." aria-label="検索...">
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">検索</button>
+            <div class="btn-group">
+              <input id="filter-input"
+                     type="search"
+                     class="form-control"
+                     placeholder="Filter"
+                     v-model.lazy="filter">
+              <i id="filter-clear"
+                 class="material-icons"
+                 @click="filter = ''">clear</i>
+            </div>
           </form>
-          -->
         </div>
       </nav>
 
@@ -84,7 +138,7 @@
                  class="tab-pane"
                  :key="tag.name"
                  :id="id('tab', tagIndex)">
-              <div v-for="(target, index) in targets"
+              <div v-for="(target, index) in filteredTargets"
                    v-if="tag.isIn(target.tags)">
                 <div class="card">
                   <span class="card-header"

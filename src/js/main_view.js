@@ -54,11 +54,25 @@ async function main() {
       fileToImport: null,
       state,
       konami: false,
+      filter: null,
     },
     computed: {
       tags: function () {
         let result = this.realTags.map(tag => ({name: tag, isIn: (tags) => tags.includes(tag), real: true}));
         return result.concat(this.pseudoTags || []);
+      },
+      filteredTargets: function () {
+        console.log('Filtering');
+
+        if (!this.filter)
+          return this.targets;
+
+        let filter = new RegExp(this.filter, 'i');
+        return this.targets.filter(target => {
+          if (filter.test(target.title))
+            return true;
+          return false;
+        });
       }
     },
     methods: Util.Methods({

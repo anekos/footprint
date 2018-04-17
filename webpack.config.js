@@ -38,6 +38,7 @@ const app = {
       {from: 'src/html/popup.html', to: 'html'},
       {from: 'src/icon/64.png', to: 'icon'},
       {from: 'src/meta/manifest.json'},
+      {from: 'src/vendor/material-design-icons/MaterialIcons-Regular.woff2', to: 'font'},
     ], {}),
     new ZipPlugin({
       filename: '../footprint.zip'
