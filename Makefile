@@ -5,17 +5,17 @@ export PATH := node_modules/.bin:$(PATH)
 
 .PHONY: dist
 
-release: build sign
-	(cd dist ; zip -r ../footprint.zip .)
-
-sign:
-	web-ext sign --source-dir dist
+watch:
+	npm run watch
 
 build:
 	npm run build
 
-watch:
-	npm run watch
+release: build sign
+	./script/release
+
+sign:
+	web-ext sign --source-dir dist
 
 install:
 	npm install
