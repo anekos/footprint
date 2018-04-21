@@ -27,9 +27,7 @@ export default (function () {
             title: pageTitle,
           });
           target.lastUpdatedAt = getTime();
-          value[Footprint.Name.Page(pageUrl)] = {
-            targetUrl: targetUrl,
-          };
+          value[Footprint.Name.Page(pageUrl)] = {targetUrl};
           await browser.storage.local.set(value);
           return true;
         } else {
@@ -68,7 +66,7 @@ export default (function () {
       }
 
       value.targets[url] = {
-        title: title,
+        title,
         pages: [],
         tags: tags,
       };
@@ -180,10 +178,10 @@ export default (function () {
     notify: function (message) {
       if (chrome.notifications) {
         chrome.notifications.create({
-          'type': 'basic',
-          'iconUrl': chrome.extension.getURL('icons/64.png'),
-          'title': 'Footprint',
-          'message': message
+          type: 'basic',
+          iconUrl: chrome.extension.getURL('icons/64.png'),
+          title: 'Footprint',
+          message: message
         });
       } else {
         browser.runtime.sendMessage({'name': 'notify', 'message': message});
