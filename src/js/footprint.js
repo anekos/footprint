@@ -55,9 +55,18 @@ export default (function () {
 
     newTarget: async function (url, title, tags) {
       let value = await browser.storage.local.get({targets: {}});
+
       if (value.targets[url]) {
         return Promise.reject('Already bookmarked');
       }
+
+      let page = await Footprint.getPage(url);
+      if (page) {
+        let target = await Footprint.getTarget(page.targetUrl);
+        let title = (target && target.title) || url;
+        return Promise.reject('Already bookmarked for ' + title);
+      }
+
       value.targets[url] = {
         title: title,
         pages: [],
