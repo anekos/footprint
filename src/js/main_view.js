@@ -148,6 +148,15 @@ async function main() {
         } catch (e) {
           return 'Invalid URL: <' + url + '>';
         }
+      },
+      editTitle: async (target) => {
+        let title = prompt('New target title', target.title);
+        title && (title = title.trim());
+        if (!title)
+          return;
+
+        await Footprint.updateTarget(target.url, {title})
+        target.title = title;
       }
     }),
   });
@@ -156,7 +165,7 @@ async function main() {
   JQuery(Util.id('#tab', state.tag)).addClass('active');
   JQuery(Util.id('#tab-link', state.tag)).addClass('active');
   if (typeof state.target !== 'undefined') {
-    JQuery(Util.id('#target', state.tag, state.target)).addClass('show');
+    JQuery(Util.id('#target', state.tag, state.target)).collapse('show');
   }
 
   window.jQuery = JQuery;

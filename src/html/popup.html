@@ -6,10 +6,10 @@
     <style>
       body {
         width: 400px;
-        padding: 1em;
+        padding: 0.5em;
       }
       #tags {
-        max-height: 10em;
+        max-height: 15em;
         overflow-y: auto;
       }
     </style>
@@ -21,37 +21,49 @@
   <body>
     <div id="app" class="container">
 
-      <div class="row card-body">
-        <div id="open" class="col btn btn-primary" @click="showBookmarks">Show bookmarks</div>
-      </div>
+      <div class="card-columns">
 
-      <div class="card">
-        <div class="form-row card-body">
-          <div id="tags" class="col">
-            <div v-if="tags.length == 0">
-              Please add a new tag,<br /> if you want.
+        <div id="open"
+             class="col btn btn-primary mb-2"
+             @click="showBookmarks">Show bookmarks</div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group">
+              <input class="form-control"
+                     type="text"
+                     placeholder="Title"
+                     v-model="title">
             </div>
-            <div class="custom-control custom-checkbox"
-                 v-for="(tag, index) in tags">
-              <input type="checkbox"
-                     class="custom-control-input tag-check"
-                     :id="'tag' + index"
-                     v-model="checked[tag]">
-              <label class="custom-control-label" :for="'tag' + index">{{ tag }}</label>
+            <div class="form-row form-group">
+              <div id="tags" class="col">
+                <div v-if="tags.length == 0">
+                  Please add a new tag,<br /> if you want.
+                </div>
+                <div class="custom-control custom-checkbox"
+                     v-for="(tag, index) in tags">
+                  <input type="checkbox"
+                         class="custom-control-input tag-check"
+                         :id="'tag' + index"
+                         v-model="checked[tag]">
+                  <label class="custom-control-label" :for="'tag' + index">{{ tag }}</label>
+                </div>
+              </div>
+              <div class="col">
+                <input type="text"
+                       class="form-control"
+                       placeholder="New tag name"
+                       v-model.lazy.trim="newTagName">
+                <button type="button"
+                        id="new-tag-button"
+                        class="btn btn-secondary btn-block"
+                        @click="addNewTag">Add new tag</div>
             </div>
-          </div>
-          <div class="col">
-            <button id="add-bookmark"
-                    class="btn btn-primary btn-block"
-                    @click="addBookmark">Bookmark</button>
-            <input type="text"
-                   class="form-control"
-                   placeholder="New tag name"
-                   v-model.lazy.trim="newTagName">
-            <button type="button"
-                    id="new-tag-button"
-                    class="btn btn-secondary btn-block"
-                    @click="addNewTag">Add new tag</div>
+            <div class="form-group mb-0">
+              <button id="add-bookmark"
+                      class="btn btn-primary btn-block"
+                      @click="addBookmark">Bookmark</button>
+            </div>
           </div>
         </div>
       </div>

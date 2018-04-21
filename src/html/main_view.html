@@ -63,6 +63,26 @@
         cursor: pointer;
         color: #ccc;
       }
+
+      .title-edit {
+        display: none;
+        font-size: 1.0em;
+      }
+
+      *:hover > .title-edit {
+        display: inline;
+        font-size: 1.0em;
+      }
+
+      [data-toggle="collapse"]:not(.collapsed) i:before {
+        font-family: 'Material Icons';
+        content: "expand_less";
+      }
+
+      [data-toggle="collapse"].collapsed i:before{
+        font-family: 'Material Icons';
+        content: "expand_more";
+      }
     </style>
   </head>
   <body>
@@ -142,15 +162,19 @@
                    v-if="tag.isIn(target.tags)">
                 <div class="card">
                   <span class="card-header"
-                        data-toggle="collapse"
-                        role="button"
-                        aria-expanded="false"
-                        :href="id('#target',tagIndex, index)"
-                        :aria-controls="id('target', tagIndex, index)"
-                        @click="updateLocationHash('target', index)">
-                    <span :title="'Pages: ' + target.pages.length + '\nTags: ' + target.tags.join(', ')">
+                        role="button">
+                    <a data-toggle="collapse"
+                       aria-expanded="false"
+                       class="collapsed"
+                       :href="id('#target',tagIndex, index)"
+                       :aria-controls="id('target', tagIndex, index)"
+                       @click="updateLocationHash('target', index)"
+                       :title="'Pages: ' + target.pages.length + '\nTags: ' + target.tags.join(', ')">
+                      <i class="material-icons"></i>
                       {{ removeTags(target.title.trim()) || target.url }}
-                    </span>
+                    </a>
+                    <span class="material-icons btn btn-sm title-edit"
+                          @click.capture.prevent.self="editTitle(target)">mode_edit</span>
                   </span>
                   <div class="collapse"
                        :data-parent="id('#tab', tagIndex)"

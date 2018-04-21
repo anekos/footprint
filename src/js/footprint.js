@@ -107,6 +107,18 @@ export default (function () {
       }
     },
 
+    updateTarget: async function (targetUrl, props) {
+      let value = await browser.storage.local.get({targets: {}});
+
+      let target = value.targets[targetUrl];
+      if (!target)
+        return Promise.reject('Target not found: ' + targetUrl);
+
+      Object.assign(target, props);
+
+      return browser.storage.local.set(value);
+    },
+
     updateTitle: async function (targetUrl, pageUrl, pageTitle) {
       let value = await browser.storage.local.get({targets: {}});
 
