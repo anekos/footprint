@@ -1,7 +1,9 @@
 
 import Vue from 'vue'
-import Footprint from './footprint.js'
-import Util from './util.js'
+
+import Footprint from './footprint'
+import Util from './util'
+
 
 
 async function main() {

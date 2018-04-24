@@ -1,11 +1,11 @@
 
-import Vue from 'vue'
 import Bootstrap from 'bootstrap'
 import JQuery from 'jquery'
 import Konami from 'konami'
+import Vue from 'vue'
 
-import Footprint from './footprint.js'
-import Util from './util.js'
+import Footprint from './footprint'
+import Util from './util'
 
 import draggable from 'vuedraggable'
 
@@ -80,10 +80,10 @@ async function main() {
       }
     },
     methods: Util.Methods({
-      focus: (selector) => {
+      focus: selector => {
         return JQuery(selector).focus();
       },
-      updateTags: async function (target) {
+      updateTags: async target => {
         target.tags = [].concat(target.newTags);
         await Footprint.updateTags(target.url, target.tags);
       },
@@ -139,7 +139,7 @@ async function main() {
         let hash = [this.state.tag, this.state.target];
         window.location.hash = hash.join('-');
       },
-      shortenUrl: function (url) {
+      shortenUrl: url => {
         try {
           let _url = new URL(url);
           if (_url.pathname.length <= 1)
@@ -149,7 +149,7 @@ async function main() {
           return 'Invalid URL: <' + url + '>';
         }
       },
-      editTitle: async (target) => {
+      editTitle: async target => {
         let title = prompt('New target title', target.title);
         title && (title = title.trim());
         if (!title)

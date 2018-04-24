@@ -1,6 +1,9 @@
 
-import Footprint from './footprint.js'
 import jQuery from 'jquery'
+
+import Footprint from './footprint'
+
+
 
 async function main () {
 
