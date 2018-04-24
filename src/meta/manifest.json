@@ -16,7 +16,14 @@
       "64": "icon/64.png"
     },
     "default_title": "Footprint",
-    "default_popup": "html/popup.html"
+    "default_popup": "html/popup.html",
+    "theme_icons": [
+      {
+        "light": "icon/64-white.png",
+        "dark": "icon/64.png",
+        "size": 64
+      }
+    ]
   },
   "content_scripts": [
     {

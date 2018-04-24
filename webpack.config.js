@@ -36,7 +36,7 @@ const app = {
     new CopyWebpackPlugin([
       {from: 'src/html/main_view.html', to: 'html'},
       {from: 'src/html/popup.html', to: 'html'},
-      {from: 'src/icon/64.png', to: 'icon'},
+      {from: 'src/icon/*.png', to: 'icon/[name].[ext]'},
       {from: 'src/meta/manifest.json'},
       {from: 'src/vendor/material-design-icons/MaterialIcons-Regular.woff2', to: 'font'},
     ], {}),
