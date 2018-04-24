@@ -5,27 +5,27 @@ import jQuery from 'jquery'
 async function main () {
 
   function makeModifyOnClick (targetUrl) {
-    async function onClick (e, element) {
+    async function onClick (pageUrl, pageTitle) {
       Footprint.debug('newPage/target', targetUrl);
-
-      let pageTitle = element.textContent.trim();
-      let pageUrl = element.href;
 
       if (!pageUrl.trim())
         return;
 
-      let target = await Footprint.getTarget(targetUrl);
-      let nextPage = target.pages.length + 1;
-      if (await Footprint.newPage(targetUrl)(pageUrl, pageTitle)) {
-        await Footprint.notify('New page (' + nextPage + ') for ' + target.title);
-      }
+      browser.runtime.sendMessage(
+        {
+          name: 'newPage',
+          targetUrl,
+          pageUrl,
+          pageTitle,
+        }
+      );
     };
 
     return function modifyOnClick (root) {
       root.addEventListener('click', (e) => {
         let found = jQuery(e.target).closest('a')[0];
         if (found && typeof found.href === 'string') {
-          return onClick(e, found);
+          return onClick(found.href.toString(), found.textContent.trim());
         }
       }, false);
     };

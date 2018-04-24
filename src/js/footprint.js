@@ -176,17 +176,7 @@ export default (function () {
     },
 
     notify: function (message) {
-      if (chrome.notifications) {
-        chrome.notifications.create({
-          type: 'basic',
-          iconUrl: chrome.extension.getURL('icons/64.png'),
-          title: 'Footprint',
-          message: message
-        });
-      } else {
-        browser.runtime.sendMessage({'name': 'notify', 'message': message});
-        console.log('footprint-notification: ' + message);
-      }
+      browser.runtime.sendMessage({'name': 'notify', 'message': message});
     },
 
     debug: function (name, info) {
