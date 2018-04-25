@@ -55,7 +55,7 @@ async function main () {
 
     modifyOnClick(document.querySelector('body'));
 
-    return Footprint.updateTitle(targetUrl, pageUrl, document.title);
+    return Footprint.updatePage(targetUrl, pageUrl, document.title);
   }
 
   install();
