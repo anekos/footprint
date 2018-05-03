@@ -136,7 +136,7 @@ let Footprint = {
     target.lastPageUrl = pageUrl;
     await browser.storage.local.set(value);
 
-    let updated = true;
+    let updated = false;
     target.pages.forEach(page => {
       if (page.url == pageUrl && page.title != pageTitle) {
         page.title = pageTitle;
