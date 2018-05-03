@@ -133,9 +133,6 @@ let Footprint = {
     if (!target)
       return;
 
-    target.lastPageUrl = pageUrl;
-    await browser.storage.local.set(value);
-
     let updated = false;
     target.pages.forEach(page => {
       if (page.url == pageUrl && page.title != pageTitle) {
@@ -144,8 +141,10 @@ let Footprint = {
       }
     });
 
-    if (updated)
+    if (updated || target.lastPageUrl != pageUrl) {
+      target.lastPageUrl = pageUrl;
       return browser.storage.local.set(value);
+    }
   },
 
   refreshTarget: async (targetUrl, property) => {
