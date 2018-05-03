@@ -180,9 +180,7 @@ let Footprint = {
     let value = await browser.storage.local.get({targets: {}});
     let pages = value.targets[targetUrl].pages;
     delete value.targets[targetUrl];
-    for (let page of pages) {
-      await Footprint.removePage(page.url);
-    }
+    await browser.storage.local.remove(pages.map(page => page.url));
     return browser.storage.local.set(value);
   },
 
