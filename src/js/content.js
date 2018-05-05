@@ -34,20 +34,39 @@ async function main () {
     };
   }
 
+  function installPositionSaver(pageUrl) {
+    window.addEventListener('beforeunload', (e) => {
+      let position = {
+        x: window.pageXOffset,
+        y: window.pageYOffset,
+      };
+      browser.runtime.sendMessage(
+        {
+          name: 'savePosition',
+          pageUrl,
+          position,
+        }
+      );
+    });
+  }
+
   async function install () {
     if (window.hasRun) {
       return;
     }
 
     let pageUrl = document.location.href;
-    let value = await Footprint.getPage(pageUrl);
+    let page = await Footprint.getPage(pageUrl);
 
-    if (!(value && value.targetUrl))
+    if (!(page && page.targetUrl))
       return Promise.reject('No page data');
+
+    if (page.position)
+      window.scrollTo(page.position.x, page.position.y);
 
     window.hasRun = true;
 
-    let targetUrl = value.targetUrl;
+    let targetUrl = page.targetUrl;
 
     Footprint.debug('install/target', targetUrl);
 
@@ -55,7 +74,9 @@ async function main () {
 
     modifyOnClick(document.querySelector('body'));
 
-    return Footprint.updatePage(targetUrl, pageUrl, document.title);
+    installPositionSaver(pageUrl);
+
+    return Footprint.updatePageTitle(targetUrl, pageUrl, document.title);
   }
 
   install();
@@ -67,6 +88,5 @@ async function main () {
   });
 
 }
-
 
 main();

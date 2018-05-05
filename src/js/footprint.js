@@ -126,7 +126,7 @@ let Footprint = {
     return browser.storage.local.set(value);
   },
 
-  updatePage: async (targetUrl, pageUrl, pageTitle) => {
+  updatePageTitle: async (targetUrl, pageUrl, pageTitle) => {
     let value = await browser.storage.local.get({targets: {}});
 
     let target = value.targets[targetUrl];
@@ -144,6 +144,15 @@ let Footprint = {
     if (updated || target.lastPageUrl != pageUrl) {
       target.lastPageUrl = pageUrl;
       return browser.storage.local.set(value);
+    }
+  },
+
+  updatePagePosition: async (pageUrl, position) => {
+    let key = Footprint.Name.Page(pageUrl);
+    let value = await browser.storage.local.get(key)
+    if (value[key]) {
+      value[key].position = position;
+      await browser.storage.local.set(value);
     }
   },
 

@@ -27,6 +27,10 @@ const Actions = {
       notify('New page (' + nextPage + ') for ' + target.title);
     }
   },
+
+  savePosition: command => {
+    Footprint.updatePagePosition(command.pageUrl, command.position);
+  },
 };
 
 
