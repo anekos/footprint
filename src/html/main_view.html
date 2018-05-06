@@ -176,7 +176,7 @@
                        @click="updateLocationHash('target', index)"
                        :title="'Pages: ' + target.pages.length + '\nTags: ' + target.tags.join(', ')">
                       <i class="material-icons"></i>
-                      {{ removeTags(target.title.trim()) || target.url }}
+                      {{ removeHtmlTags(target.title.trim()) || target.url }}
                     </a>
                     <span class="material-icons btn btn-sm title-edit"
                           @click.capture.prevent.self="editTitle(target)">mode_edit</span>
@@ -191,7 +191,7 @@
                               v-for="(page, pageIndex) in target.pages.slice().reverse()"
                               :key="page.url">
                             <a class="hoge" :href="page.url">
-                              {{ target.pages.length - pageIndex }}. {{ removeTags(page.title.trim()) || shortenUrl(page.url) }}
+                              {{ target.pages.length - pageIndex }}. {{ removeHtmlTags(page.title.trim()) || shortenUrl(page.url) }}
                             <span class="material-icons marker"
                                   title="last visited page"
                                   :class="{'text-danger': target.lastPageUrl === page.url, 'text-white': target.lastPageUrl !== page.url}"

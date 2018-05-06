@@ -26,7 +26,7 @@ let Util = {
     return Object.assign({}, Util, original || {}, {
       arrayEq: strictArrayEquals,
       dateFormat: DateFormat,
-      removeTags: (html) => {
+      removeHtmlTags: (html) => {
         return html && html.replace(/<.+?>/g, '');
       }
     });
