@@ -61,8 +61,12 @@ async function main () {
     if (!(page && page.targetUrl))
       return Promise.reject('No page data');
 
-    if (page.position)
-      window.scrollTo(page.position.x, page.position.y);
+    if (page.position) {
+      Footprint.getTarget(page.targetUrl).then(target => {
+        if (target.lastPageUrl == pageUrl)
+          window.scrollTo(page.position.x, page.position.y);
+      });
+    }
 
     window.hasRun = true;
 
