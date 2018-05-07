@@ -20,6 +20,13 @@ async function main() {
   let realTags = Footprint.Helper.extractTags(targets, config.tagOrder);
 
 
+  async function checkTargetUpdate(target) {
+    let urls = target.pages.map(it => it.url);
+    let found = await checkUpdate(urls);
+    Vue.set(target, 'updated', 0 < found.length);
+  }
+
+
   targets.forEach(target => {
     target.newTags = [].concat(target.tags);
   });
@@ -63,8 +70,6 @@ async function main() {
         return result.concat(this.pseudoTags || []);
       },
       filteredTargets: function () {
-        console.log('Filtering');
-
         if (!this.filter)
           return this.targets;
 
@@ -81,10 +86,9 @@ async function main() {
       }
     },
     methods: Util.Methods({
-      checkUpdate: async target => {
-        let urls = target.pages.map(it => it.url);
-        let found = await checkUpdate(urls);
-        Vue.set(target, 'updated', 0 < found.length);
+      checkTargetUpdate,
+      checkAllTargetsUpdates: function () {
+        this.targets.forEach(checkTargetUpdate);
       },
       focus: selector => {
         return JQuery(selector).focus();

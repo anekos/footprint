@@ -124,6 +124,8 @@
                 <a class="dropdown-item" data-toggle="modal" data-target="#remove-tags-modal">Remove tags</a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#order-tags-modal">Order tags</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="modal" data-target="#update-checker-modal">Check updates</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" data-target="#import-modal">Import</a>
                 <a class="dropdown-item" data-toggle="modal" @click="exportBookmarks">Export</a>
               </div>
@@ -221,7 +223,7 @@
                                 v-on:click="removeTarget(target, index)">Unbookmark</button>
                         <button href="#"
                                 class="btn btn-sm btn-secondary btn-block"
-                                v-on:click="checkUpdate(target)">Check updates</button>
+                                v-on:click="checkTargetUpdate(target)">Check updates</button>
                         <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                     </div>
@@ -377,6 +379,38 @@
                       data-dismiss="modal"
                       v-if="fileToImport"
                       @click="importBookmarks">Import</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- UPDATE CHECKER -->
+
+      <div class="modal fade" id="update-checker-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Find next pages</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <ul>
+                  <li v-for="target in targets"
+                      v-if="target.updated">
+                    <a :href="target.pages.slice(-1)[0].url">
+                      {{ removeHtmlTags(target.title.trim()) || target.url }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" @click="checkAllTargetsUpdates">Check</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
