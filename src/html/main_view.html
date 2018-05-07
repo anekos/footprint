@@ -64,14 +64,20 @@
         color: #ccc;
       }
 
-      .title-edit {
+      .red-icon {
+        color: red;
+      }
+
+      .target-action-icon {
         display: none;
+      }
+
+      .target-title-icon {
         font-size: 1.0em;
       }
 
-      *:hover > .title-edit {
+      *:hover > .target-action-icon {
         display: inline;
-        font-size: 1.0em;
       }
 
       [data-toggle="collapse"]:not(.collapsed) i:before {
@@ -178,7 +184,9 @@
                       <i class="material-icons"></i>
                       {{ removeHtmlTags(target.title.trim()) || target.url }}
                     </a>
-                    <span class="material-icons btn btn-sm title-edit"
+                    <span class="material-icons btn btn-sm target-title-icon red-icon"
+                          :class="{invisible: !target.updated}">new_releases</span>
+                    <span class="material-icons btn btn-sm target-title-icon target-action-icon"
                           @click.capture.prevent.self="editTitle(target)">mode_edit</span>
                   </span>
                   <div class="collapse"
@@ -209,8 +217,11 @@
                       </div>
                       <div class="col-md-1">
                         <button href="#"
-                                class="btn btn-sm btn-danger"
+                                class="btn btn-sm btn-danger btn-block"
                                 v-on:click="removeTarget(target, index)">Unbookmark</button>
+                        <button href="#"
+                                class="btn btn-sm btn-secondary btn-block"
+                                v-on:click="checkUpdate(target)">Check updates</button>
                         <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                     </div>

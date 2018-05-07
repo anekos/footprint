@@ -6,6 +6,7 @@ import Vue from 'vue'
 
 import Footprint from './footprint'
 import Util from './util'
+import checkUpdate from './update-checker'
 
 import draggable from 'vuedraggable'
 
@@ -80,6 +81,11 @@ async function main() {
       }
     },
     methods: Util.Methods({
+      checkUpdate: async target => {
+        let urls = target.pages.map(it => it.url);
+        let found = await checkUpdate(urls);
+        Vue.set(target, 'updated', 0 < found.length);
+      },
       focus: selector => {
         return JQuery(selector).focus();
       },

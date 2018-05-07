@@ -47,4 +47,8 @@ function search(urls) {
 }
 
 
-export default search;
+export default urls => {
+  let found = search(urls);
+  if (found)
+    return new RegExp('^' + regexpEscape(found.prefix) + '.+' + regexpEscape(found.suffix) + '$');
+}
