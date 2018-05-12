@@ -156,17 +156,6 @@ let Footprint = {
     }
   },
 
-  refreshTarget: async (targetUrl, property) => {
-    let value = await browser.storage.local.get({targets: {}});
-    let target = value.targets[targetUrl];
-    if (target) {
-      target[property] = getTime();
-      return browser.storage.local.set(value);
-    } else {
-      return false;
-    }
-  },
-
   removeTags: async tags => {
     let value = await browser.storage.local.get({targets: {}});
     for (let key in value.targets) {

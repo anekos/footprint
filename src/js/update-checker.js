@@ -1,11 +1,9 @@
 
 import axios from 'axios'
-import urlPattern from './url-pattern'
 
 
 
-async function check(urls) {
-  let pattern = urlPattern(urls)
+async function check(pattern, urls) {
   let url = urls.slice(-1)[0];
 
   let existence = {};

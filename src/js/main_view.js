@@ -7,6 +7,7 @@ import Vue from 'vue'
 import Footprint from './footprint'
 import Util from './util'
 import checkUpdate from './update-checker'
+import urlPattern from './url-pattern'
 
 import draggable from 'vuedraggable'
 
@@ -21,8 +22,10 @@ async function main() {
 
 
   async function checkTargetUpdate(target) {
+    if (!target.nextUrlPattern)
+      return;
     let urls = target.pages.map(it => it.url);
-    let found = await checkUpdate(urls);
+    let found = await checkUpdate(new RegExp(target.nextUrlPattern), urls);
     Vue.set(target, 'updated', 0 < found.length);
   }
 
@@ -90,8 +93,17 @@ async function main() {
       checkAllTargetsUpdates: function () {
         this.targets.forEach(checkTargetUpdate);
       },
+      clearNextUrlPattern: function (target) {
+        Vue.set(target, 'nextUrlPattern', undefined);
+        this.updateTarget(target);
+      },
       focus: selector => {
         return JQuery(selector).focus();
+      },
+      generateNextUrlPattern: function (target) {
+        let urls = target.pages.map(it => it.url);
+        Vue.set(target, 'nextUrlPattern', urlPattern(urls).source);
+        this.updateTarget(target);
       },
       updateTags: async target => {
         target.tags = [].concat(target.newTags);
@@ -148,6 +160,9 @@ async function main() {
         this.state[name] = value;
         let hash = [this.state.tag, this.state.target];
         window.location.hash = hash.join('-');
+      },
+      updateTarget: target => {
+        Footprint.updateTarget(target.url, target);
       },
       shortenUrl: url => {
         try {
