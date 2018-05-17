@@ -216,15 +216,25 @@
                             </button>
                           </li>
                         </ul>
+                        <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">Updated: {{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                       <div class="col-md-1">
-                        <button href="#"
-                                class="btn btn-sm btn-danger btn-block my-1"
-                                v-on:click="removeTarget(target, index)">Unbookmark</button>
-                        <button type="button"
-                                class="btn btn-secondary btn-sm mb-1"
-                                data-toggle="modal"
-                                :data-target="id('#setting-modal', tagIndex, index)">Setting</button>
+                        <div class="flex-grow-1">
+                          <button href="#"
+                                  class="btn btn-sm btn-primary btn-block"
+                                  v-if="target.nextUrlPattern"
+                                  v-on:click="checkTargetUpdate(target)">Check updates</button>
+                          <button type="button"
+                                  class="btn btn-secondary btn-block btn-sm mb-1"
+                                  data-toggle="modal"
+                                  :data-target="id('#setting-modal', tagIndex, index)">Setting</button>
+                        </div>
+                        <div class="mt-auto">
+                          <button href="#"
+                                  class="btn btn-sm btn-danger btn-block mt-5"
+                                  v-on:click="removeTarget(target, index)">Unbookmark</button>
+                        </div>
+                        <!-- SETTING -->
                         <div class="modal fade"
                              tabindex="-1"
                              role="dialog"
@@ -257,11 +267,6 @@
                             </div>
                           </div>
                         </div>
-                        <button href="#"
-                                class="btn btn-sm btn-secondary btn-block"
-                                v-if="target.nextUrlPattern"
-                                v-on:click="checkTargetUpdate(target)">Check updates</button>
-                        <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                     </div>
                     <div class="row m-3">
