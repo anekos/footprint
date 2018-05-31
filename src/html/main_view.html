@@ -64,14 +64,20 @@
         color: #ccc;
       }
 
-      .title-edit {
+      .red-icon {
+        color: red;
+      }
+
+      .target-action-icon {
         display: none;
+      }
+
+      .target-title-icon {
         font-size: 1.0em;
       }
 
-      *:hover > .title-edit {
+      *:hover > .target-action-icon {
         display: inline;
-        font-size: 1.0em;
       }
 
       [data-toggle="collapse"]:not(.collapsed) i:before {
@@ -117,6 +123,8 @@
                 <a class="dropdown-item" data-toggle="modal" data-target="#new-tag-modal">New tag</a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#remove-tags-modal">Remove tags</a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#order-tags-modal">Order tags</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="modal" data-target="#update-checker-modal">Check updates</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" data-target="#import-modal">Import</a>
                 <a class="dropdown-item" data-toggle="modal" @click="exportBookmarks">Export</a>
@@ -178,7 +186,9 @@
                       <i class="material-icons"></i>
                       {{ removeHtmlTags(target.title.trim()) || target.url }}
                     </a>
-                    <span class="material-icons btn btn-sm title-edit"
+                    <span class="material-icons btn btn-sm target-title-icon red-icon"
+                          :class="{invisible: !target.updated}">new_releases</span>
+                    <span class="material-icons btn btn-sm target-title-icon target-action-icon"
                           @click.capture.prevent.self="editTitle(target)">mode_edit</span>
                   </span>
                   <div class="collapse"
@@ -206,12 +216,57 @@
                             </button>
                           </li>
                         </ul>
+                        <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">Updated: {{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
                       </div>
                       <div class="col-md-1">
-                        <button href="#"
-                                class="btn btn-sm btn-danger"
-                                v-on:click="removeTarget(target, index)">Unbookmark</button>
-                        <small v-if="target.lastUpdatedAt" class="mt-2 text-muted">{{ dateFormat(new Date(target.lastUpdatedAt), 'yyyy/mm/dd\nHH:MM:ss') }}</small>
+                        <div class="flex-grow-1">
+                          <button href="#"
+                                  class="btn btn-sm btn-primary btn-block"
+                                  v-if="target.nextUrlPattern"
+                                  v-on:click="checkTargetUpdate(target)">Check updates</button>
+                          <button type="button"
+                                  class="btn btn-secondary btn-block btn-sm mb-1"
+                                  data-toggle="modal"
+                                  :data-target="id('#setting-modal', tagIndex, index)">Setting</button>
+                        </div>
+                        <div class="mt-auto">
+                          <button href="#"
+                                  class="btn btn-sm btn-danger btn-block mt-5"
+                                  v-on:click="removeTarget(target, index)">Unbookmark</button>
+                        </div>
+                        <!-- SETTING -->
+                        <div class="modal fade"
+                             tabindex="-1"
+                             role="dialog"
+                             :id="id('setting-modal', tagIndex, index)">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">New tag</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="form-group">
+                                  <label>Next URL pattern</label>
+                                  <input type="text"
+                                         class="form-control"
+                                         placeholder="Regular expression"
+                                         @change="updateTarget(target)"
+                                         v-model.lazy="target.nextUrlPattern">
+                                  <button class="btn btn-primary"
+                                          @click="generateNextUrlPattern(target)">Generate</button>
+                                  <button class="btn btn-danger"
+                                          @click="clearNextUrlPattern(target)">Clear</button>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="row m-3">
@@ -370,6 +425,39 @@
           </div>
         </div>
       </div>
+
+
+      <!-- UPDATE CHECKER -->
+
+      <div class="modal fade" id="update-checker-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Find next pages</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <ul>
+                  <li v-for="target in targets"
+                      v-if="target.updated">
+                    <a :href="target.pages.slice(-1)[0].url">
+                      {{ removeHtmlTags(target.title.trim()) || target.url }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" @click="checkAllTargetsUpdates">Check</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 
     </div>
