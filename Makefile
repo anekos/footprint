@@ -11,8 +11,9 @@ watch:
 build:
 	npm run build
 
-release: build sign
+release: build
 	./script/release
+	web-ext sign --source-dir dist
 
 sign:
 	web-ext sign --source-dir dist
