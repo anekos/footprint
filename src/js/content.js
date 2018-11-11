@@ -1,5 +1,6 @@
 
 import jQuery from 'jquery'
+import firebase from 'firebase/app';
 
 import Footprint from './footprint'
 

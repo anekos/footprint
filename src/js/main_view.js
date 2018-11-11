@@ -3,6 +3,8 @@ import Bootstrap from 'bootstrap'
 import JQuery from 'jquery'
 import Konami from 'konami'
 import Vue from 'vue'
+import firebase from 'firebase/app';
+import  'firebase/database';
 
 import Footprint from './footprint'
 import Util from './util'
@@ -196,6 +198,27 @@ async function main() {
   window.jQuery = JQuery;
 
   new Konami(() => { app.konami = true });
+
+  var firebaseApp = firebase.initializeApp({
+    apiKey: 'AIzaSyCfRe3--VRnCDxr-PJpsbppzBtjw1M0LgM',
+    // authDomain: '<your-auth-domain>',
+    databaseURL: 'https://anekos-footprint.firebaseio.com/',
+    //projectId: '<your-cloud-firestore-project>',
+    // storageBucket: '<your-storage-bucket>',
+    //messagingSenderId: '<your-sender-id>'
+  });
+
+
+  var database = firebaseApp.database();
+
+  var counterRef = firebase.database().ref('test');
+
+  counterRef.once('value', function(snapshot) {
+    let count = snapshot.val() || {};
+    console.log(count);
+    counterRef.update({count: (count.count || 0) + 1});
+  });
+
 }
 
 
